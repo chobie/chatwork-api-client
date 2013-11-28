@@ -110,6 +110,14 @@ class Client
         return $result;
     }
 
+    public function getContacts()
+    {
+        $this->initiateStrategy();
+        $result = $this->getStrategy()->getContacts();
+
+        return $result;
+    }
+
 
     public function loadChat()
     {

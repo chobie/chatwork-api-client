@@ -12,4 +12,6 @@ interface Strategy
     public function getMyStatus();
 
     public function getMyTasks($params = array());
+
+    public function getContacts();
 }
