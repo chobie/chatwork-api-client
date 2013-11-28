@@ -14,4 +14,7 @@ interface Strategy
     public function getMyTasks($params = array());
 
     public function getContacts();
+
+    public function getRooms();
+
 }

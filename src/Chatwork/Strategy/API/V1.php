@@ -77,6 +77,17 @@ class V1
         return json_decode($res[1], true);
     }
 
+    public function getRooms()
+    {
+        $res = $this->driver->request('GET', $this->params['endpoint'], '/v1/rooms', array());
+        if ($res[0]['HTTP_CODE'] == 401) {
+            $response = json_decode($res[1], true);
+            throw new UnauthorizedException("errors: " . join(PHP_EOL, $response['errors']));
+        }
+
+        return json_decode($res[1], true);
+    }
+
 
     protected function getDefaultParams()
     {

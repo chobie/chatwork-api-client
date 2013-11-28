@@ -118,6 +118,14 @@ class Client
         return $result;
     }
 
+    public function getRooms()
+    {
+        $this->initiateStrategy();
+        $result = $this->getStrategy()->getRooms();
+
+        return $result;
+    }
+
 
     public function loadChat()
     {
