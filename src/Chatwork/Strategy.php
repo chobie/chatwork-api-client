@@ -27,4 +27,6 @@ interface Strategy
 
     public function leaveRoom($room_id);
 
+    public function updateRoomMembers($room_id, $members_admin_ids = array(), $params = array());
+
 }

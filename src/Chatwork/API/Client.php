@@ -174,6 +174,14 @@ class Client
         return $result;
     }
 
+    public function updateRoomMembers($room_id, $members_admin_ids, $params = array())
+    {
+        $this->initiateStrategy();
+        $result = $this->getStrategy()->updateRoomMembers($params);
+
+        return $result;
+    }
+
 
     public function loadChat()
     {

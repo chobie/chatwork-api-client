@@ -147,6 +147,20 @@ class V1
         return json_decode($res[1], true);
     }
 
+    public function updateRoomMembers($room_id, $members_admin_ids = array(), $params = array())
+    {
+        $parmas = array_merge(array(
+            "members_admin_ids" => $members_admin_ids,
+        ), $params);
+        $res = $this->driver->request('PUT', $this->params['endpoint'], sprintf('/v1/rooms/%d', $room_id), array(), $params);
+        if ($res[0]['HTTP_CODE'] == 401) {
+            $response = json_decode($res[1], true);
+            throw new UnauthorizedException("errors: " . join(PHP_EOL, $response['errors']));
+        }
+
+        return json_decode($res[1], true);
+    }
+
 
 
     protected function getDefaultParams()
