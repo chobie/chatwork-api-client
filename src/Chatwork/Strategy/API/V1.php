@@ -88,6 +88,17 @@ class V1
         return json_decode($res[1], true);
     }
 
+    public function createRoom($name, $members_admin_ids, $params = array())
+    {
+        $res = $this->driver->request('POST', $this->params['endpoint'], '/v1/rooms', array(), $params);
+        if ($res[0]['HTTP_CODE'] == 401) {
+            $response = json_decode($res[1], true);
+            throw new UnauthorizedException("errors: " . join(PHP_EOL, $response['errors']));
+        }
+
+        return json_decode($res[1], true);
+    }
+
 
     protected function getDefaultParams()
     {

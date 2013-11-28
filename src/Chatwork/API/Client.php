@@ -126,6 +126,14 @@ class Client
         return $result;
     }
 
+    public function createRoom($name, $members_admin_ids, $params = array())
+    {
+        $this->initiateStrategy();
+        $result = $this->getStrategy()->createRoom($name, $members_admin_ids, $params);
+
+        return $result;
+    }
+
 
     public function loadChat()
     {

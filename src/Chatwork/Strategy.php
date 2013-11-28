@@ -17,4 +17,6 @@ interface Strategy
 
     public function getRooms();
 
+    public function createRoom($name, $members_admin_ids, $params = array());
+
 }
