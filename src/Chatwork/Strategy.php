@@ -10,4 +10,6 @@ interface Strategy
     public function me();
 
     public function getMyStatus();
+
+    public function getMyTasks($params = array());
 }

@@ -102,6 +102,14 @@ class Client
         return $result;
     }
 
+    public function getMyTasks($params = array())
+    {
+        $this->initiateStrategy();
+        $result = $this->getStrategy()->getMyTasks($params);
+
+        return $result;
+    }
+
 
     public function loadChat()
     {
