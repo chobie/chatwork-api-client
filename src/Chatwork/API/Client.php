@@ -86,6 +86,13 @@ class Client
         return $result;
     }
 
+    /**
+     * get own information
+     *
+     * @return array
+     * @throws UnauthorizedException
+     * @see http://developer.chatwork.com/ja/endpoint_me.html#GET-me
+     */
     public function me()
     {
         $this->initiateStrategy();
@@ -94,6 +101,13 @@ class Client
         return $result;
     }
 
+    /**
+     * get own statics information
+     *
+     * @return array
+     * @throws UnauthorizedException
+     * @see http://developer.chatwork.com/ja/endpoint_my.html#GET-my-status
+     */
     public function getMyStatus()
     {
         $this->initiateStrategy();
@@ -102,6 +116,14 @@ class Client
         return $result;
     }
 
+    /**
+     * get own task information
+     *
+     * @param array $params accepts `assigned_by_account_id` and `status` option.
+     * @return array
+     * @throws UnauthorizedException
+     * @see http://developer.chatwork.com/ja/endpoint_my.html#GET-my-tasks
+     */
     public function getMyTasks($params = array())
     {
         $this->initiateStrategy();
@@ -110,6 +132,13 @@ class Client
         return $result;
     }
 
+    /**
+     * get contact list
+     *
+     * @return array
+     * @throws UnauthorizedException
+     * @see http://developer.chatwork.com/ja/endpoint_contacts.html#GET-contacts
+     */
     public function getContacts()
     {
         $this->initiateStrategy();
@@ -118,6 +147,13 @@ class Client
         return $result;
     }
 
+    /**
+     * get own room list
+     *
+     * @return array
+     * @throws UnauthorizedException
+     * @see http://developer.chatwork.com/ja/endpoint_rooms.html#GET-rooms
+     */
     public function getRooms()
     {
         $this->initiateStrategy();
@@ -126,6 +162,16 @@ class Client
         return $result;
     }
 
+    /**
+     * create new room
+     *
+     * @param       $name
+     * @param array $members_admin_ids
+     * @param array $params
+     * @return array
+     * @throws UnauthorizedException
+     * @see http://developer.chatwork.com/ja/endpoint_rooms.html#POST-rooms
+     */
     public function createRoom($name, $members_admin_ids, $params = array())
     {
         /**
@@ -142,6 +188,14 @@ class Client
         return $result;
     }
 
+    /**
+     * get specified room information
+     *
+     * @param string $room_id
+     * @return array
+     * @throws UnauthorizedException
+     * @see http://developer.chatwork.com/ja/endpoint_rooms.html#GET-rooms-room_id
+     */
     public function getRoomById($room_id)
     {
         $this->initiateStrategy();
@@ -150,6 +204,15 @@ class Client
         return $result;
     }
 
+    /**
+     * update room meta information
+     *
+     * @param       $room_id
+     * @param array $params
+     * @return mixed|void
+     * @throws UnauthorizedException
+     * @see http://developer.chatwork.com/ja/endpoint_rooms.html#PUT-rooms-room_id
+     */
     public function updateRoomInfo($room_id, $params = array())
     {
         $this->initiateStrategy();
@@ -158,6 +221,14 @@ class Client
         return $result;
     }
 
+    /**
+     * delete room
+     *
+     * @param $room_id
+     * @return array
+     * @throws UnauthorizedException
+     * @see http://developer.chatwork.com/ja/endpoint_rooms.html#DELETE-rooms-room_id
+     */
     public function deleteRoom($room_id)
     {
         $this->initiateStrategy();
@@ -166,6 +237,14 @@ class Client
         return $result;
     }
 
+    /**
+     * leave room
+     *
+     * @param $room_id
+     * @return array
+     * @throws UnauthorizedException
+     * @see http://developer.chatwork.com/ja/endpoint_rooms.html#DELETE-rooms-room_id
+     */
     public function leaveRoom($room_id)
     {
         $this->initiateStrategy();
@@ -174,6 +253,16 @@ class Client
         return $result;
     }
 
+    /**
+     * batch update current room members
+     *
+     * @param       $room_id
+     * @param array $members_admin_ids
+     * @param array $params
+     * @return mixed|void
+     * @throws UnauthorizedException
+     * @see http://developer.chatwork.com/ja/endpoint_rooms.html#PUT-rooms-room_id-members
+     */
     public function updateRoomMembers($room_id, $members_admin_ids, $params = array())
     {
         $this->initiateStrategy();
@@ -182,6 +271,14 @@ class Client
         return $result;
     }
 
+    /**
+     * get room messages
+     *
+     * @param $room_id
+     * @return array
+     * @throws UnauthorizedException
+     * @see http://developer.chatwork.com/ja/endpoint_rooms.html#GET-rooms-room_id-messages
+     */
     public function getRoomMessage($room_id)
     {
         $this->initiateStrategy();
@@ -190,6 +287,15 @@ class Client
         return $result;
     }
 
+    /**
+     * get specified message
+     *
+     * @param $room_id
+     * @param $message_id
+     * @return array
+     * @throws UnauthorizedException
+     * @see http://developer.chatwork.com/ja/endpoint_rooms.html#GET-rooms-room_id-messages-message_id
+     */
     public function getRoomMessageByMessageId($room_id, $message_id)
     {
         $this->initiateStrategy();
@@ -198,6 +304,15 @@ class Client
         return $result;
     }
 
+    /**
+     * get room tasks
+     *
+     * @param       $room_id
+     * @param array $params
+     * @return mixed|void
+     * @throws UnauthorizedException
+     * @see http://developer.chatwork.com/ja/endpoint_rooms.html#GET-rooms-room_id-tasks
+     */
     public function getRoomTasks($room_id, $params = array())
     {
         $this->initiateStrategy();
@@ -206,6 +321,15 @@ class Client
         return $result;
     }
 
+    /**
+     * get room task
+     *
+     * @param $room_id
+     * @param $task_id
+     * @return mixed|void
+     * @throws UnauthorizedException
+     * @see http://developer.chatwork.com/ja/endpoint_rooms.html#GET-rooms-room_id-tasks-task_id
+     */
     public function getRoomTaskById($room_id, $task_id)
     {
         $this->initiateStrategy();
@@ -214,6 +338,15 @@ class Client
         return $result;
     }
 
+    /**
+     * get room files
+     *
+     * @param       $room_id
+     * @param array $params
+     * @return array
+     * @throws UnauthorizedException
+     * @see http://developer.chatwork.com/ja/endpoint_rooms.html#GET-rooms-room_id-files
+     */
     public function getRoomFiles($room_id, $params = array())
     {
         $this->initiateStrategy();
@@ -222,6 +355,16 @@ class Client
         return $result;
     }
 
+    /**
+     * get room file by id
+     *
+     * @param      $room_id
+     * @param      $file_id
+     * @param bool $create_download_url
+     * @return mixed|void
+     * @throws UnauthorizedException
+     * @see http://developer.chatwork.com/ja/endpoint_rooms.html#GET-rooms-room_id-files-file_id
+     */
     public function getRoomFileById($room_id, $file_id, $create_download_url = false)
     {
         $this->initiateStrategy();
@@ -230,6 +373,17 @@ class Client
         return $result;
     }
 
+    /**
+     * add new task
+     *
+     * @param       $room_id
+     * @param array $to_ids
+     * @param       $body
+     * @param null  $limit
+     * @return mixed|void
+     * @throws UnauthorizedException
+     * @see http://developer.chatwork.com/ja/endpoint_rooms.html#POST-rooms-room_id-tasks
+     */
     public function addTask($room_id, $to_ids = array(), $body, $limit = null)
     {
         $this->initiateStrategy();
