@@ -198,6 +198,15 @@ class Client
         return $result;
     }
 
+    public function getRoomTasks($room_id, $params = array())
+    {
+        $this->initiateStrategy();
+        $result = $this->getStrategy()->getRoomTasks($room_id, $params);
+
+        return $result;
+    }
+
+
     public function loadChat()
     {
         throw new UnsupportedFeatureException(sprintf("%s method does not support yet", __METHOD__));

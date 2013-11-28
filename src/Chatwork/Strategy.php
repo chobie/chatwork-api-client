@@ -33,4 +33,6 @@ interface Strategy
 
     public function getRoomMessageByMessageId($room_id, $message_id);
 
+    public function getRoomTasks($room_id, $params);
+
 }
