@@ -128,6 +128,14 @@ class Client
 
     public function createRoom($name, $members_admin_ids, $params = array())
     {
+        /**
+         * accepted params
+         *
+         * icon_preset
+         * members_member_ids
+         * members_readonly_ids
+         * description
+         */
         $this->initiateStrategy();
         $result = $this->getStrategy()->createRoom($name, $members_admin_ids, $params);
 
