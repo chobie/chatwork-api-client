@@ -110,6 +110,17 @@ class V1
         return json_decode($res[1], true);
     }
 
+    public function updateRoomInfo($room_id, $params = array())
+    {
+        $res = $this->driver->request('PUT', $this->params['endpoint'], sprintf('/v1/rooms/%d', $room_id), array(), $params);
+        if ($res[0]['HTTP_CODE'] == 401) {
+            $response = json_decode($res[1], true);
+            throw new UnauthorizedException("errors: " . join(PHP_EOL, $response['errors']));
+        }
+
+        return json_decode($res[1], true);
+    }
+
 
     protected function getDefaultParams()
     {

@@ -21,4 +21,6 @@ interface Strategy
 
     public function getRoomById($room_id);
 
+    public function updateRoomInfo($room_id, $params = array());
+
 }
