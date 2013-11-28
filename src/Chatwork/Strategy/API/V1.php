@@ -205,6 +205,30 @@ class V1
         return json_decode($res[1], true);
     }
 
+    public function getRoomFiles($room_id, $params = array())
+    {
+        $res = $this->driver->request('GET', $this->params['endpoint'], sprintf('/v1/rooms/%d/files', $room_id), $params);
+        if ($res[0]['HTTP_CODE'] == 401) {
+            $response = json_decode($res[1], true);
+            throw new UnauthorizedException("errors: " . join(PHP_EOL, $response['errors']));
+        }
+
+        return json_decode($res[1], true);
+    }
+
+    public function getRoomFileById($room_id, $file_id, $create_download_url = false)
+    {
+        $res = $this->driver->request('GET', $this->params['endpoint'], sprintf('/v1/rooms/%d/files/%d', $room_id, $file_id), array(
+            "create_download_url" => ($create_download_url) ? "true" : "false"
+        ));
+        if ($res[0]['HTTP_CODE'] == 401) {
+            $response = json_decode($res[1], true);
+            throw new UnauthorizedException("errors: " . join(PHP_EOL, $response['errors']));
+        }
+
+        return json_decode($res[1], true);
+    }
+
     public function addTask($room_id, $to_ids = array(), $body, $limit = null)
     {
         $params = array(

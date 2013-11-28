@@ -214,6 +214,21 @@ class Client
         return $result;
     }
 
+    public function getRoomFiles($room_id, $params = array())
+    {
+        $this->initiateStrategy();
+        $result = $this->getStrategy()->getRoomFiles($room_id, $params);
+
+        return $result;
+    }
+
+    public function getRoomFileById($room_id, $file_id, $create_download_url = false)
+    {
+        $this->initiateStrategy();
+        $result = $this->getStrategy()->getRoomFileById($room_id, $file_id, $create_download_url);
+
+        return $result;
+    }
 
 
     public function loadChat()
@@ -230,11 +245,6 @@ class Client
     }
 
     public function checkTask()
-    {
-        throw new UnsupportedFeatureException(sprintf("%s method does not support yet", __METHOD__));
-    }
-
-    public function addRoom()
     {
         throw new UnsupportedFeatureException(sprintf("%s method does not support yet", __METHOD__));
     }

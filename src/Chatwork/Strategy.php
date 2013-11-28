@@ -39,4 +39,8 @@ interface Strategy
 
     public function getRoomTaskById($room_id, $task_id);
 
+    public function getRoomFiles($room_id, $params);
+
+    public function getRoomFileById($room_id, $file_id, $create_download_url);
+
 }
