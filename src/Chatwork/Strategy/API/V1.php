@@ -30,129 +30,63 @@ class V1
 
     public function sendMessage($room_id, $message)
     {
-        $res = $this->driver->request('POST', $this->params['endpoint'], sprintf('/v1/rooms/%d/messages', $room_id), array(), array(
+        return $this->api('POST', $this->params['endpoint'], sprintf('/v1/rooms/%d/messages', $room_id), array(), array(
             "body" => $message,
         ));
-        if ($res[0]['HTTP_CODE'] == 401) {
-            $response = json_decode($res[1], true);
-            throw new UnauthorizedException("errors: " . join(PHP_EOL, $response['errors']));
-        }
-
-        return json_decode($res[1], true);
     }
 
     public function me()
     {
-        $res = $this->driver->request('GET', $this->params['endpoint'], '/v1/me', array());
-        if ($res[0]['HTTP_CODE'] == 401) {
-            $response = json_decode($res[1], true);
-            throw new UnauthorizedException("errors: " . join(PHP_EOL, $response['errors']));
-        }
-
-        return json_decode($res[1], true);
+        return $this->api('GET', $this->params['endpoint'], '/v1/me', array());
     }
 
     public function getMyStatus()
     {
-        $res = $this->driver->request('GET', $this->params['endpoint'], '/v1/my/status', array());
-        if ($res[0]['HTTP_CODE'] == 401) {
-            $response = json_decode($res[1], true);
-            throw new UnauthorizedException("errors: " . join(PHP_EOL, $response['errors']));
-        }
-
-        return json_decode($res[1], true);
+        return $this->api('GET', $this->params['endpoint'], '/v1/my/status', array());
     }
 
     public function getMyTasks($params = array())
     {
-        $res = $this->driver->request('GET', $this->params['endpoint'], '/v1/my/status', $params);
-        if ($res[0]['HTTP_CODE'] == 401) {
-            $response = json_decode($res[1], true);
-            throw new UnauthorizedException("errors: " . join(PHP_EOL, $response['errors']));
-        }
-
-        return json_decode($res[1], true);
+        return $this->api('GET', $this->params['endpoint'], '/v1/my/status', $params);
     }
 
     public function getContacts()
     {
-        $res = $this->driver->request('GET', $this->params['endpoint'], '/v1/contacts', array());
-        if ($res[0]['HTTP_CODE'] == 401) {
-            $response = json_decode($res[1], true);
-            throw new UnauthorizedException("errors: " . join(PHP_EOL, $response['errors']));
-        }
-
-        return json_decode($res[1], true);
+        return $this->api('GET', $this->params['endpoint'], '/v1/contacts', array());
     }
 
     public function getRooms()
     {
-        $res = $this->driver->request('GET', $this->params['endpoint'], '/v1/rooms', array());
-        if ($res[0]['HTTP_CODE'] == 401) {
-            $response = json_decode($res[1], true);
-            throw new UnauthorizedException("errors: " . join(PHP_EOL, $response['errors']));
-        }
-
-        return json_decode($res[1], true);
+        return $this->api('GET', $this->params['endpoint'], '/v1/rooms', array());
     }
 
     public function createRoom($name, $members_admin_ids, $params = array())
     {
-        $res = $this->driver->request('POST', $this->params['endpoint'], '/v1/rooms', array(), $params);
-        if ($res[0]['HTTP_CODE'] == 401) {
-            $response = json_decode($res[1], true);
-            throw new UnauthorizedException("errors: " . join(PHP_EOL, $response['errors']));
-        }
-
-        return json_decode($res[1], true);
+        return $this->api('POST', $this->params['endpoint'], '/v1/rooms', array(), $params);
     }
 
     public function getRoomById($room_id)
     {
-        $res = $this->driver->request('GET', $this->params['endpoint'], sprintf('/v1/rooms/%d', $room_id), array());
-        if ($res[0]['HTTP_CODE'] == 401) {
-            $response = json_decode($res[1], true);
-            throw new UnauthorizedException("errors: " . join(PHP_EOL, $response['errors']));
-        }
-
-        return json_decode($res[1], true);
+        return $this->api('GET', $this->params['endpoint'], sprintf('/v1/rooms/%d', $room_id), array());
     }
 
     public function updateRoomInfo($room_id, $params = array())
     {
-        $res = $this->driver->request('PUT', $this->params['endpoint'], sprintf('/v1/rooms/%d', $room_id), array(), $params);
-        if ($res[0]['HTTP_CODE'] == 401) {
-            $response = json_decode($res[1], true);
-            throw new UnauthorizedException("errors: " . join(PHP_EOL, $response['errors']));
-        }
-
-        return json_decode($res[1], true);
+        return $this->api('PUT', $this->params['endpoint'], sprintf('/v1/rooms/%d', $room_id), array(), $params);
     }
 
     public function deleteRoom($room_id)
     {
-        $res = $this->driver->request('DELETE', $this->params['endpoint'], sprintf('/v1/rooms/%d', $room_id), array(), array(
+        return $this->api('DELETE', $this->params['endpoint'], sprintf('/v1/rooms/%d', $room_id), array(), array(
             "action_type" => "delete",
         ));
-        if ($res[0]['HTTP_CODE'] == 401) {
-            $response = json_decode($res[1], true);
-            throw new UnauthorizedException("errors: " . join(PHP_EOL, $response['errors']));
-        }
-
-        return json_decode($res[1], true);
     }
 
     public function leaveRoom($room_id)
     {
-        $res = $this->driver->request('DELETE', $this->params['endpoint'], sprintf('/v1/rooms/%d', $room_id), array(), array(
+        return $this->api('DELETE', $this->params['endpoint'], sprintf('/v1/rooms/%d', $room_id), array(), array(
             "action_type" => "leave",
         ));
-        if ($res[0]['HTTP_CODE'] == 401) {
-            $response = json_decode($res[1], true);
-            throw new UnauthorizedException("errors: " . join(PHP_EOL, $response['errors']));
-        }
-
-        return json_decode($res[1], true);
     }
 
     public function updateRoomMembers($room_id, $members_admin_ids = array(), $params = array())
@@ -160,81 +94,40 @@ class V1
         $parmas = array_merge(array(
             "members_admin_ids" => $members_admin_ids,
         ), $params);
-        $res = $this->driver->request('PUT', $this->params['endpoint'], sprintf('/v1/rooms/%d', $room_id), array(), $params);
-        if ($res[0]['HTTP_CODE'] == 401) {
-            $response = json_decode($res[1], true);
-            throw new UnauthorizedException("errors: " . join(PHP_EOL, $response['errors']));
-        }
 
-        return json_decode($res[1], true);
+        return $this->api('PUT', $this->params['endpoint'], sprintf('/v1/rooms/%d', $room_id), array(), $params);
     }
 
     public function getRoomMessage($room_id)
     {
-        $res = $this->driver->request('GET', $this->params['endpoint'], sprintf('/v1/rooms/%d', $room_id), array());
-        if ($res[0]['HTTP_CODE'] == 401) {
-            $response = json_decode($res[1], true);
-            throw new UnauthorizedException("errors: " . join(PHP_EOL, $response['errors']));
-        }
-
-        return json_decode($res[1], true);
+        return $this->api('GET', $this->params['endpoint'], sprintf('/v1/rooms/%d', $room_id), array());
     }
 
     public function getRoomMessageByMessageId($room_id, $message_id)
     {
-        $res = $this->driver->request('GET', $this->params['endpoint'], sprintf('/v1/rooms/%d/messages/%d', $room_id, $message_id), array());
-        if ($res[0]['HTTP_CODE'] == 401) {
-            $response = json_decode($res[1], true);
-            throw new UnauthorizedException("errors: " . join(PHP_EOL, $response['errors']));
-        }
-
-        return json_decode($res[1], true);
+        return $this->api('GET', $this->params['endpoint'], sprintf('/v1/rooms/%d/messages/%d', $room_id, $message_id), array());
     }
 
     public function getRoomTasks($room_id, $params = array())
     {
-        $res = $this->driver->request('GET', $this->params['endpoint'], sprintf('/v1/rooms/%d/tasks', $room_id), $params);
-        if ($res[0]['HTTP_CODE'] == 401) {
-            $response = json_decode($res[1], true);
-            throw new UnauthorizedException("errors: " . join(PHP_EOL, $response['errors']));
-        }
-
-        return json_decode($res[1], true);
+        return $this->api('GET', $this->params['endpoint'], sprintf('/v1/rooms/%d/tasks', $room_id), $params);
     }
 
     public function getRoomTaskById($room_id, $task_id)
     {
-        $res = $this->driver->request('GET', $this->params['endpoint'], sprintf('/v1/rooms/%d/tasks/%d', $room_id, $task_id), array());
-        if ($res[0]['HTTP_CODE'] == 401) {
-            $response = json_decode($res[1], true);
-            throw new UnauthorizedException("errors: " . join(PHP_EOL, $response['errors']));
-        }
-
-        return json_decode($res[1], true);
+        return $this->api('GET', $this->params['endpoint'], sprintf('/v1/rooms/%d/tasks/%d', $room_id, $task_id), array());
     }
 
     public function getRoomFiles($room_id, $params = array())
     {
-        $res = $this->driver->request('GET', $this->params['endpoint'], sprintf('/v1/rooms/%d/files', $room_id), $params);
-        if ($res[0]['HTTP_CODE'] == 401) {
-            $response = json_decode($res[1], true);
-            throw new UnauthorizedException("errors: " . join(PHP_EOL, $response['errors']));
-        }
-
-        return json_decode($res[1], true);
+        return $this->api('GET', $this->params['endpoint'], sprintf('/v1/rooms/%d/files', $room_id), $params);
     }
 
     public function getRoomFileById($room_id, $file_id, $create_download_url = false)
     {
-        $res = $this->driver->request('GET', $this->params['endpoint'], sprintf('/v1/rooms/%d/files/%d', $room_id, $file_id), array(
+        return $this->api('GET', $this->params['endpoint'], sprintf('/v1/rooms/%d/files/%d', $room_id, $file_id), array(
             "create_download_url" => ($create_download_url) ? "true" : "false"
         ));
-        if ($res[0]['HTTP_CODE'] == 401) {
-            $response = json_decode($res[1], true);
-            throw new UnauthorizedException("errors: " . join(PHP_EOL, $response['errors']));
-        }
-
-        return json_decode($res[1], true);
     }
 
     public function addTask($room_id, $to_ids = array(), $body, $limit = null)
@@ -245,7 +138,12 @@ class V1
             "limit" => $limit,
         );
 
-        $res = $this->driver->request('POST', $this->params['endpoint'], sprintf('/v1/rooms/%d/tasks', $room_id), array(), $params);
+        return $this->api('POST', $this->params['endpoint'], sprintf('/v1/rooms/%d/tasks', $room_id), array(), $params);
+    }
+
+    protected function api($http_method = "GET", $endpoint, $query, $params, $post_field = array())
+    {
+        $res = $this->driver->request($http_method, $this->params['endpoint'], $query, $params, $post_field);
         if ($res[0]['HTTP_CODE'] == 401) {
             $response = json_decode($res[1], true);
             throw new UnauthorizedException("errors: " . join(PHP_EOL, $response['errors']));
