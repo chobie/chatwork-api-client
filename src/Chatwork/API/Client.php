@@ -182,6 +182,21 @@ class Client
         return $result;
     }
 
+    public function getRoomMessage($room_id)
+    {
+        $this->initiateStrategy();
+        $result = $this->getStrategy()->getRoomMessage($room_id);
+
+        return $result;
+    }
+
+    public function getRoomMessageByMessageId($room_id, $message_id)
+    {
+        $this->initiateStrategy();
+        $result = $this->getStrategy()->getRoomMessageByMessageId($room_id, $message_id);
+
+        return $result;
+    }
 
     public function loadChat()
     {

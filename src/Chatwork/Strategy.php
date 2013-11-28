@@ -29,4 +29,8 @@ interface Strategy
 
     public function updateRoomMembers($room_id, $members_admin_ids = array(), $params = array());
 
+    public function getRoomMessage($room_id);
+
+    public function getRoomMessageByMessageId($room_id, $message_id);
+
 }
