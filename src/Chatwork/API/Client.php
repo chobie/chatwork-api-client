@@ -158,6 +158,22 @@ class Client
         return $result;
     }
 
+    public function deleteRoom($room_id)
+    {
+        $this->initiateStrategy();
+        $result = $this->getStrategy()->deleteRoom($room_id);
+
+        return $result;
+    }
+
+    public function leaveRoom($room_id)
+    {
+        $this->initiateStrategy();
+        $result = $this->getStrategy()->leaveRoom($room_id);
+
+        return $result;
+    }
+
 
     public function loadChat()
     {

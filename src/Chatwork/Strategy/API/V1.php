@@ -121,6 +121,33 @@ class V1
         return json_decode($res[1], true);
     }
 
+    public function deleteRoom($room_id)
+    {
+        $res = $this->driver->request('DELETE', $this->params['endpoint'], sprintf('/v1/rooms/%d', $room_id), array(), array(
+            "action_type" => "delete",
+        ));
+        if ($res[0]['HTTP_CODE'] == 401) {
+            $response = json_decode($res[1], true);
+            throw new UnauthorizedException("errors: " . join(PHP_EOL, $response['errors']));
+        }
+
+        return json_decode($res[1], true);
+    }
+
+    public function leaveRoom($room_id)
+    {
+        $res = $this->driver->request('DELETE', $this->params['endpoint'], sprintf('/v1/rooms/%d', $room_id), array(), array(
+            "action_type" => "leave",
+        ));
+        if ($res[0]['HTTP_CODE'] == 401) {
+            $response = json_decode($res[1], true);
+            throw new UnauthorizedException("errors: " . join(PHP_EOL, $response['errors']));
+        }
+
+        return json_decode($res[1], true);
+    }
+
+
 
     protected function getDefaultParams()
     {

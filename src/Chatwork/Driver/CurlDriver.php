@@ -40,6 +40,18 @@ class CurlDriver
             }
         } else if ($http_method == "GET") {
             curl_setopt($curl, CURLOPT_GET, 1);
+        } else if ($http_method == 'PUT') {
+            curl_setopt($curl, CURLOPT_PUT, 1);
+            if ($post_field) {
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $post_field);
+            }
+        } else if ($http_method == 'DELETE') {
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
+            if ($post_field) {
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $post_field);
+            }
+        } else {
+            throw new \Exception("unsupported httpd method: " . $http_method);
         }
 
         $response = curl_exec($curl);

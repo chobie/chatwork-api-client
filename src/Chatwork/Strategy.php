@@ -23,4 +23,8 @@ interface Strategy
 
     public function updateRoomInfo($room_id, $params = array());
 
+    public function deleteRoom($room_id);
+
+    public function leaveRoom($room_id);
+
 }
