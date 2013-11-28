@@ -206,6 +206,15 @@ class Client
         return $result;
     }
 
+    public function getRoomTaskById($room_id, $task_id)
+    {
+        $this->initiateStrategy();
+        $result = $this->getStrategy()->getRoomTaskById($room_id, $task_id);
+
+        return $result;
+    }
+
+
 
     public function loadChat()
     {
