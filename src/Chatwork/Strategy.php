@@ -35,4 +35,6 @@ interface Strategy
 
     public function getRoomTasks($room_id, $params);
 
+    public function addTask($room_id, $to_ids = array(), $body, $limit = null);
+
 }

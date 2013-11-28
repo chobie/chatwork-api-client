@@ -194,6 +194,23 @@ class V1
         return json_decode($res[1], true);
     }
 
+    public function addTask($room_id, $to_ids = array(), $body, $limit = null)
+    {
+        $params = array(
+            "to_ids" => $to_ids,
+            "body" => $body,
+            "limit" => $limit,
+        );
+
+        $res = $this->driver->request('POST', $this->params['endpoint'], sprintf('/v1/rooms/%d/tasks', $room_id), array(), $params);
+        if ($res[0]['HTTP_CODE'] == 401) {
+            $response = json_decode($res[1], true);
+            throw new UnauthorizedException("errors: " . join(PHP_EOL, $response['errors']));
+        }
+
+        return json_decode($res[1], true);
+    }
+
 
     protected function getDefaultParams()
     {

@@ -212,9 +212,12 @@ class Client
         throw new UnsupportedFeatureException(sprintf("%s method does not support yet", __METHOD__));
     }
 
-    public function addTask()
+    public function addTask($room_id, $to_ids = array(), $body, $limit = null)
     {
-        throw new UnsupportedFeatureException(sprintf("%s method does not support yet", __METHOD__));
+        $this->initiateStrategy();
+        $result = $this->getStrategy()->addTask($room_id, $to_ids, $body, $limit);
+
+        return $result;
     }
 
     public function checkTask()
