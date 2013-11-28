@@ -8,4 +8,6 @@ interface Strategy
     public function sendMessage($room_id, $message);
 
     public function me();
+
+    public function getMyStatus();
 }

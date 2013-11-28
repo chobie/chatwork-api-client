@@ -4,11 +4,11 @@ namespace Chatwork\Strategy\API\V1;
 use \Chatwork\Exception\UnauthorizedException;
 use \Chatwork\StrategyTestCase;
 
-class MeTest extends StrategyTestCase
+class MyStatusTest extends StrategyTestCase
 {
     public function testExecuteWhenHTTPOK()
     {
-        $fixture = $this->loadFixture("me.json");
+        $fixture = $this->loadFixture("my_status.json");
         $decoded_fixture = json_decode($fixture, true);
 
         $client = new \Chatwork\API\Client();
@@ -23,7 +23,7 @@ class MeTest extends StrategyTestCase
         ));
         $client->setStrategy($strategy);
 
-        $result = $client->me();
+        $result = $client->getMyStatus();
         $this->assertEquals($result, $decoded_fixture);
     }
 
@@ -46,7 +46,7 @@ class MeTest extends StrategyTestCase
             ))
         ));
         $client->setStrategy($strategy);
-        $result = $client->me();
+        $result = $client->getMyStatus();
     }
 
 }

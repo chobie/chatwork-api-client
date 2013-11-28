@@ -94,6 +94,15 @@ class Client
         return $result;
     }
 
+    public function getMyStatus()
+    {
+        $this->initiateStrategy();
+        $result = $this->getStrategy()->getMyStatus();
+
+        return $result;
+    }
+
+
     public function loadChat()
     {
         throw new UnsupportedFeatureException(sprintf("%s method does not support yet", __METHOD__));
