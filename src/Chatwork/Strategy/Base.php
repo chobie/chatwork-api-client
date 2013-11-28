@@ -2,13 +2,23 @@
 namespace Chatwork\Strategy;
 
 use Chatwork\Exception\UnsupportedFeatureException;
-use \Exception;
 use \Chatwork\Strategy;
 use \Chatwork\Driver;
 
 abstract class Base
     implements Strategy
 {
+
+    const HTTP_METHOD_POST   = 'POST';
+    const HTTP_METHOD_GET    = 'GET';
+    const HTTP_METHOD_DELETE = 'DELETE';
+    const HTTP_METHOD_PUT    = 'PUT';
+
+    const PARAM_ENDPOINT = 'endpoint';
+    const PARAM_TOKEN    = "token";
+    const PARAM_DRIVER   = "driver";
+
+
     public function initiate()
     {
     }
