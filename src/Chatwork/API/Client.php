@@ -142,6 +142,14 @@ class Client
         return $result;
     }
 
+    public function getRoomById($room_id)
+    {
+        $this->initiateStrategy();
+        $result = $this->getStrategy()->getRoomById($room_id);
+
+        return $result;
+    }
+
 
     public function loadChat()
     {
