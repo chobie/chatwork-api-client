@@ -6,7 +6,7 @@ use Chatwork\Strategy;
 use Chatwork\Driver;
 
 class V1
-    implements Strategy
+    extends Strategy\Base
 {
     protected $params = array();
 
@@ -30,7 +30,15 @@ class V1
 
     public function sendMessage($room_id, $message)
     {
-        throw UnsupportedFeatureException("not implemeneted yet");
+        $res = $this->driver->request('POST', $this->params['endpoint'], sprintf('/v1/rooms/%d/messages', $room_id), array(), array(
+            "body" => $message,
+        ));
+        if ($res[0]['HTTP_CODE'] == 401) {
+            $response = json_decode($res[1], true);
+            throw new UnauthorizedException("errors: " . join(PHP_EOL, $response['errors']));
+        }
+
+        return json_decode($res[1], true);
     }
 
     public function me()
@@ -252,7 +260,7 @@ class V1
         return array(
             "token"    => null,
             "driver"   => "Chatwork\\Driver\\CurlDriver",
-            "endpoint" => 'https://chatwork.com/',
+            "endpoint" => 'https://api.chatwork.com/',
         );
     }
 }
