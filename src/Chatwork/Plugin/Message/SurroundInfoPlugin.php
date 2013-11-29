@@ -29,17 +29,15 @@ use \Chatwork\Plugin;
  * THE SOFTWARE.
  */
 class SurroundInfoPlugin
+    extends Plugin
 {
     protected $use_title = true;
+
+    protected $type = Plugin::PLUGIN_TYPE_SEND_MESSAGE;
 
     public function __construct($use_title = true)
     {
         $this->use_title = $use_title;
-    }
-
-    public function getType()
-    {
-        return Plugin::PLUGIN_TYPE_SEND_MESSAGE;
     }
 
     public function filter(&$room_id, &$message)

@@ -1,5 +1,5 @@
 <?php
-namespace Chatwork\Server\Http;
+namespace Chatwork\Server;
 
 /**
  * Chatwork API Client
@@ -26,7 +26,7 @@ namespace Chatwork\Server\Http;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-class Response
+class HttpResponse
 {
     protected $server;
     protected $client;

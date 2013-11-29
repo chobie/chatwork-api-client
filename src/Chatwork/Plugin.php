@@ -26,7 +26,18 @@ namespace Chatwork;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-class Plugin
+abstract class Plugin
 {
     const PLUGIN_TYPE_SEND_MESSAGE = 0x01;
+
+    protected $type= 0x00;
+
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    public function getDescription()
+    {
+    }
 }
