@@ -25,19 +25,20 @@ composer.json
 
 Example
 
-````
+````php
+<?php
 require dirname(__DIR__) . DIRECTORY_SEPARATOR . join(DIRECTORY_SEPARATOR, array("src", "Chatwork", "Autoloader.php"));
-
 \Chatwork\Autoloader::register();
 
 $room_id = "123456768";
+
 $client = new \Chatwork\API\Client();
 $client->setStrategy(new \Chatwork\Strategy\API\V1(array(
-    "token"    => "*********",
-    "endpoint" => "https://api.chatwork.com",
+    "authentication" => new \Chatwork\Authentication\Header("*********"),
 )));
 $client->registerPlugins(array(
-    new Chatwork\Plugin\Message\SurroundInfoPlugin(),
+    // This plugin surrounds your message with [info] tag
+    new \Chatwork\Plugin\Message\SurroundInfoPlugin(),
 ));
 
 $client->sendMessage($room_id, "Hello World");
@@ -49,9 +50,9 @@ Requirements
 
 * php5.3 higher
 
-* curl extension
-
 * openssl extension
+
+* curl extension
 
 NOTE for self building users: chatwork api requires SSL connection. this mean you must compile PHP
 with `--with-openssl` option. please check this article http://us1.php.net/manual/ja/openssl.installation.php

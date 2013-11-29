@@ -2,7 +2,10 @@
 namespace Chatwork\Driver;
 
 use Chatwork\API\Request;
+use Chatwork\Authentication\Header;
+use Chatwork\Authentication\Nothing;
 use \Chatwork\Driver;
+use Chatwork\Strategy\Headless;
 
 /**
  * Chatwork API Client
@@ -56,11 +59,12 @@ class CurlDriver
             $request->getEndpoint(),
             $request->getQuery(),
             $request->getQueryParams(),
-            $request->getPostField()
+            $request->getPostField(),
+            $request
         );
     }
 
-    protected function requestImpl($http_method = "GET", $endpoint, $query, $params, $post_field = array())
+    protected function requestImpl($http_method = "GET", $endpoint, $query, $params, $post_field = array(), Request $request)
     {
         //$curl = curl_copy_handle($this->curl);
         $curl = $this->curl;
@@ -69,6 +73,19 @@ class CurlDriver
             $url .= "?" . http_build_query($params);
         }
         curl_setopt($curl, CURLOPT_URL, $url);
+
+        if ($request->getAuthentication()) {
+            $authentication = $request->getAuthentication();
+            if ($authentication instanceof Header) {
+                curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+                    $authentication->getAsString(),
+                ));
+            } else if ($authentication instanceof Nothing || $authentication instanceof Headless) {
+                // Nothing to do.
+            } else {
+                throw new \RuntimeException(sprintf("CurlDriver does not support %s authentication", get_class($authentication)));
+            }
+        }
 
         if ($http_method == "POST") {
             curl_setopt($curl, CURLOPT_POST, 1);

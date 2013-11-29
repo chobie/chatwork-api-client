@@ -1,6 +1,8 @@
 <?php
 namespace Chatwork\Strategy;
 
+use Chatwork\Authentication\Nothing;
+use Chatwork\Authentication\Headless as Authentication_Headless;
 use \Exception;
 use \Chatwork\Strategy;
 use \Chatwork\Driver;
@@ -29,6 +31,14 @@ class Headless
     public function __construct($params = array())
     {
         $this->params = array_merge($this->getDefaultParams(), $params);
+
+        if (!($this->params['authentication'] instanceof Authentication_Headless)) {
+            throw new \InvalidArgumentException(
+                sprintf("headless strategy requires Chatwork\\Authentication\\Headless %s given",
+                    get_class($this->params['authentication']
+                )
+            ));
+        }
     }
 
     public function initiate()
@@ -99,8 +109,8 @@ class Headless
             "args"    => "",
         ));
         $builder->setPostField(http_build_query(array(
-                'email'      => $this->params['login'],
-                'password'   => $this->params['password'],
+                'email'      => $this->params['authentication']->getLogin(),
+                'password'   => $this->params['authentication']->getPassword(),
                 'auto_login' => "on",
                 'login'      => 'Login',
             )
@@ -133,11 +143,10 @@ class Headless
     protected function getDefaultParams()
     {
         return array(
-            "login"    => null,
-            "password" => null,
-            "s"        => null,
-            "driver"   => "Chatwork\\Driver\\CurlDriver",
-            "endpoint" => 'https://www.chatwork.com/',
+            "s"              => null,
+            "authentication" => new Nothing(),
+            "driver"         => "Chatwork\\Driver\\CurlDriver",
+            "endpoint"       => 'https://www.chatwork.com/',
         );
     }
 }
