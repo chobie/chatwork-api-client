@@ -1,6 +1,7 @@
 <?php
 namespace Chatwork\Driver;
 
+use Chatwork\API\Request;
 use \Chatwork\Driver;
 
 /**
@@ -49,7 +50,17 @@ class CurlDriver
         $this->curl = $ch;
     }
 
-    public function request($http_method = "GET", $endpoint, $query, $params, $post_field = array())
+    public function request(Request $request)
+    {
+        return $this->requestImpl($request->getRequestMethod(),
+            $request->getEndpoint(),
+            $request->getQuery(),
+            $request->getQueryParams(),
+            $request->getPostField()
+        );
+    }
+
+    protected function requestImpl($http_method = "GET", $endpoint, $query, $params, $post_field = array())
     {
         //$curl = curl_copy_handle($this->curl);
         $curl = $this->curl;

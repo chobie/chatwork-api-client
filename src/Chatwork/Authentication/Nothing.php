@@ -1,7 +1,6 @@
 <?php
-namespace Chatwork;
-
-use Chatwork\API\Request;
+namespace Chatwork\Authentication;
+use Chatwork\Authentication;
 
 /**
  * Chatwork API Client
@@ -28,7 +27,10 @@ use Chatwork\API\Request;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-interface Driver
+class Nothing implements Authentication
 {
-    public function request(Request $request);
+    public function getAsString()
+    {
+        return "";
+    }
 }

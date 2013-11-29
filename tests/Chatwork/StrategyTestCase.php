@@ -17,7 +17,7 @@ class StrategyTestCase extends \PHPUnit_Framework_TestCase
         $driver->expects($this->any())
             ->method('request')
             ->will($this->returnValue($result)
-            );
+        );
 
         return $driver;
     }

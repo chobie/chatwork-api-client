@@ -1,7 +1,6 @@
 <?php
-namespace Chatwork;
-
-use Chatwork\API\Request;
+namespace Chatwork\Authentication;
+use Chatwork\Authentication;
 
 /**
  * Chatwork API Client
@@ -28,7 +27,18 @@ use Chatwork\API\Request;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-interface Driver
+class Header implements Authentication
 {
-    public function request(Request $request);
+    /** @var string $token*/
+    protected $token;
+
+    public function __construct($token)
+    {
+        $this->token = $token;
+    }
+
+    public function getAsString()
+    {
+        return sprintf("X-ChatWorkToken: %s", $this->token);
+    }
 }

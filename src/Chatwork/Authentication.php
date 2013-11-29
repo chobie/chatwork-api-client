@@ -1,8 +1,6 @@
 <?php
 namespace Chatwork;
 
-use Chatwork\API\Request;
-
 /**
  * Chatwork API Client
  *
@@ -28,7 +26,11 @@ use Chatwork\API\Request;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-interface Driver
+
+interface Authentication
 {
-    public function request(Request $request);
+    /**
+     * @mixed string
+     */
+    public function getAsString();
 }

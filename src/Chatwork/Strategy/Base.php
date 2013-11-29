@@ -39,10 +39,10 @@ abstract class Base
     const HTTP_METHOD_DELETE = 'DELETE';
     const HTTP_METHOD_PUT    = 'PUT';
 
-    const PARAM_ENDPOINT = 'endpoint';
-    const PARAM_TOKEN    = "token";
-    const PARAM_DRIVER   = "driver";
-
+    const PARAM_ENDPOINT     = 'endpoint';
+    const PARAM_TOKEN        = "token";
+    const PARAM_DRIVER       = "driver";
+    const PARAM_AUTHENTICATE = 'authenticate';
 
     public function initiate()
     {

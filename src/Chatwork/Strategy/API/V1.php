@@ -1,6 +1,8 @@
 <?php
 namespace Chatwork\Strategy\API;
 
+use Chatwork\API\RequestBuilder;
+use Chatwork\Authentication\Nothing;
 use Chatwork\Exception\UnauthorizedException;
 use Chatwork\Strategy;
 use Chatwork\Driver;
@@ -428,7 +430,16 @@ class V1
 
     protected function api($http_method = "GET", $endpoint, $query, $params, $post_field = array())
     {
-        $res = $this->driver->request($http_method, $this->params[self::PARAM_ENDPOINT], $query, $params, $post_field);
+        $builder = new RequestBuilder();
+        $builder->setRequestMethod($http_method);
+        $builder->setEndpoint($endpoint);
+        $builder->setQuery($query);
+        $builder->setQueryParams($params);
+        $builder->setPostField($post_field);
+        $builder->setAuthentication($this->params['authenticate']);
+        $request = $builder->build();
+        $res = $this->driver->request($request);
+
         if ($res[0]['HTTP_CODE'] == 401) {
             $response = json_decode($res[1], true);
             throw new UnauthorizedException("errors: " . join(PHP_EOL, $response['errors']));
@@ -441,9 +452,10 @@ class V1
     protected function getDefaultParams()
     {
         return array(
-            self::PARAM_TOKEN    => null,
-            self::PARAM_DRIVER   => "Chatwork\\Driver\\CurlDriver",
-            self::PARAM_ENDPOINT => 'https://api.chatwork.com/',
+            self::PARAM_TOKEN         => null,
+            self::PARAM_AUTHENTICATE => new Nothing(),
+            self::PARAM_DRIVER        => "Chatwork\\Driver\\CurlDriver",
+            self::PARAM_ENDPOINT      => 'https://api.chatwork.com/',
         );
     }
 }
