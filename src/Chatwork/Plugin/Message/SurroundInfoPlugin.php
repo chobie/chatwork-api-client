@@ -45,7 +45,7 @@ class SurroundInfoPlugin
         list($title, $description) = explode("\n", $message, 2);
 
         $msg = "[info]";
-        if ($this->use_title) {
+        if ($this->use_title && !empty($description)) {
             $msg .= "[title]" . $title . "[/title]";
         } else {
             $msg .= $title . PHP_EOL;
