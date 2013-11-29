@@ -95,10 +95,21 @@ class CurlDriver
         $info = curl_getinfo($curl);
 
         $header = substr($response, 0, $info['header_size']);
+        $headers = array();
+        foreach(preg_split("/\r?\n/", trim($header)) as $line) {
+            if (!isset($headers['HTTP_CODE'])) {
+                list($version, $status, $status) = explode(" ", $line, 3);
+                $headers['HTTP_CODE'] = $status;
+            } else {
+                list($key, $value) = explode(":", $line, 2);
+                $headers[$key] = trim($value);
+            }
+        }
+
         $output = substr($response, $info['header_size']);
 
         return array(
-            $header,
+            $headers,
             $output
         );
 
