@@ -1,5 +1,7 @@
 <?php
-namespace Chatwork\API;
+namespace Chatwork;
+
+use \Chatwork\API\Client;
 
 /**
  * Chatwork API Client
@@ -26,7 +28,7 @@ namespace Chatwork\API;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-class Factory
+class APIFactory
 {
     public function getInstance()
     {
