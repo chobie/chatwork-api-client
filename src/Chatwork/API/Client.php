@@ -266,7 +266,7 @@ class Client
     public function updateRoomMembers($room_id, $members_admin_ids, $params = array())
     {
         $this->initiateStrategy();
-        $result = $this->getStrategy()->updateRoomMembers($params);
+        $result = $this->getStrategy()->updateRoomMembers($room_id, $members_admin_ids, $params);
 
         return $result;
     }
