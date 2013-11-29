@@ -51,7 +51,8 @@ class CurlDriver
 
     public function request($http_method = "GET", $endpoint, $query, $params, $post_field = array())
     {
-        $curl = curl_copy_handle($this->curl);
+        //$curl = curl_copy_handle($this->curl);
+        $curl = $this->curl;
         $url = $endpoint . $query;
         if (!empty($params)) {
             $url .= "?" . http_build_query($params);
