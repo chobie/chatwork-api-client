@@ -233,4 +233,8 @@ interface Strategy
      */
     public function getRoomFileById($room_id, $file_id, $create_download_url);
 
+    public function setAuthentication(Authentication $authentication);
+
+    public function setDriver(Driver $driver);
+
 }

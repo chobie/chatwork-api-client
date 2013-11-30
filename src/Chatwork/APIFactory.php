@@ -72,7 +72,7 @@ class APIFactory
             $config['proxy'] = sprintf("%s://%s:%d", $proto, $info['host'], $info['port']);
         }
 
-        $api = new \Chatwork\Api\Client();
+        $api = new Client();
         $authentication_class = $config['authentication'];
         if (is_string($authentication_class)) {
             $authentication = new $authentication_class($api);
@@ -92,6 +92,8 @@ class APIFactory
 
         $strategy_class = $config['strategy'];
         $strategy = new $strategy_class();
+        /** @var \Chatwork\Strategy $strategy */
+
         $strategy->setAuthentication($authentication);
         $strategy->setDriver($driver);
 
