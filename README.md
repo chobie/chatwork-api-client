@@ -31,8 +31,8 @@ require __DIR__ . DIRECTORY_SEPARATOR . join(DIRECTORY_SEPARATOR, array("vendor"
 $room_id = "123456768";
 
 $client = new \Chatwork\API\Client();
-$client->setStrategy(new \Chatwork\Strategy\API\V1(array(
-    "authentication" => new \Chatwork\Authentication\Header("*********"),
+$client->setStrategy(new \Chatwork\Strategy\API\V1Strategy(array(
+    "authentication" => new \Chatwork\Authentication\HeaderAuthentication("*********"),
 )));
 $client->registerPlugins(array(
     // This plugin surrounds your message with [info] tag
@@ -63,7 +63,7 @@ openssl
 
 OpenSSL support => enabled
 OpenSSL Library Version => OpenSSL 0.9.8o 01 Jun 2010
-OpenSSL Header Version => OpenSSL 0.9.8o 01 Jun 2010
+OpenSSL HeaderAuthentication Version => OpenSSL 0.9.8o 01 Jun 2010
 ````
 
 LICENSE

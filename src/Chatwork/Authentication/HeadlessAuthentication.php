@@ -27,7 +27,7 @@ use Chatwork\Authentication;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-class Headless implements Authentication
+class HeadlessAuthentication implements Authentication
 {
     /** @var string $token*/
     protected $login;

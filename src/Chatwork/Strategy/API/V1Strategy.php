@@ -2,7 +2,7 @@
 namespace Chatwork\Strategy\API;
 
 use \Chatwork\API\RequestBuilder;
-use \Chatwork\Authentication\Nothing;
+use \Chatwork\Authentication\NothingAuthentication;
 use \Chatwork\Exception\UnauthorizedException;
 use \Chatwork\Strategy;
 use \Chatwork\Driver;
@@ -32,8 +32,8 @@ use \Chatwork\Driver;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-class V1
-    extends Strategy\Base
+class V1Strategy
+    extends Strategy\BaseStrategy
 {
     protected $params = array();
 
@@ -453,7 +453,7 @@ class V1
     {
         return array(
             self::PARAM_TOKEN         => null,
-            self::PARAM_AUTHENTICATE => new Nothing(),
+            self::PARAM_AUTHENTICATE => new NothingAuthentication(),
             self::PARAM_DRIVER        => "Chatwork\\Driver\\CurlDriver",
             self::PARAM_ENDPOINT      => 'https://api.chatwork.com/',
         );

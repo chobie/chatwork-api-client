@@ -2,10 +2,10 @@
 namespace Chatwork\Driver;
 
 use \Chatwork\API\Request;
-use \Chatwork\Authentication\Header;
-use \Chatwork\Authentication\Nothing;
+use \Chatwork\Authentication\HeaderAuthentication;
+use \Chatwork\Authentication\NothingAuthentication;
 use \Chatwork\Driver;
-use \Chatwork\Strategy\Headless;
+use \Chatwork\Strategy\HeadlessStrategy;
 
 /**
  * Chatwork API Client
@@ -76,13 +76,13 @@ class CurlDriver
 
         if ($request->getAuthentication()) {
             $authentication = $request->getAuthentication();
-            if ($authentication instanceof Header) {
+            if ($authentication instanceof HeaderAuthentication) {
                 // TODO: should move this block to v1 strategy
                 curl_setopt($curl, CURLOPT_HTTPHEADER, array(
                     $authentication->getAsString(),
                 ));
-            } else if ($authentication instanceof Nothing || $authentication instanceof Headless) {
-                // Nothing to do.
+            } else if ($authentication instanceof NothingAuthentication || $authentication instanceof HeadlessStrategy) {
+                // NothingAuthentication to do.
             } else {
                 throw new \RuntimeException(sprintf("CurlDriver does not support %s authentication", get_class($authentication)));
             }

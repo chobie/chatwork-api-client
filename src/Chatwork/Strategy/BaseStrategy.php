@@ -30,7 +30,7 @@ use \Chatwork\Driver;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-abstract class Base
+abstract class BaseStrategy
     implements Strategy
 {
 

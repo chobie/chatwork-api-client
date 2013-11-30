@@ -1,16 +1,16 @@
 <?php
 namespace Chatwork\Strategy;
 
-use \Chatwork\Authentication\Nothing;
-use \Chatwork\Authentication\Headless as Authentication_Headless;
+use \Chatwork\Authentication\NothingAuthentication;
+use \Chatwork\Authentication\HeadlessAuthentication as Authentication_Headless;
 use \Exception;
 use \Chatwork\Strategy;
 use \Chatwork\Driver;
 use \Chatwork\API\RequestBuilder;
 use \Chatwork\API\Request;
 
-class Headless
-    extends Strategy\Base
+class HeadlessStrategy
+    extends Strategy\BaseStrategy
 {
     const CLIENT_VERSION = '1.80a';
 
@@ -34,7 +34,7 @@ class Headless
 
         if (!($this->params['authentication'] instanceof Authentication_Headless)) {
             throw new \InvalidArgumentException(
-                sprintf("headless strategy requires Chatwork\\Authentication\\Headless %s given",
+                sprintf("headless strategy requires Chatwork\\Authentication\\HeadlessAuthentication %s given",
                     get_class($this->params['authentication']
                 )
             ));
@@ -144,7 +144,7 @@ class Headless
     {
         return array(
             "s"              => null,
-            "authentication" => new Nothing(),
+            "authentication" => new NothingAuthentication(),
             "driver"         => "Chatwork\\Driver\\CurlDriver",
             "endpoint"       => 'https://www.chatwork.com/',
         );

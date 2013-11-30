@@ -13,7 +13,7 @@ class AddTaskTest extends StrategyTestCase
         $decoded_fixture = json_decode($fixture, true);
 
         $client = new \Chatwork\API\Client();
-        $strategy = new \Chatwork\Strategy\API\V1(array(
+        $strategy = new \Chatwork\Strategy\API\V1Strategy(array(
             "driver" => $this->getMockDriver(array(
                 array(
                     "HTTP_CODE"    => 200,
@@ -37,7 +37,7 @@ class AddTaskTest extends StrategyTestCase
         $decoded_fixture = json_decode($fixture, true);
 
         $client = new \Chatwork\API\Client();
-        $strategy = new \Chatwork\Strategy\API\V1(array(
+        $strategy = new \Chatwork\Strategy\API\V1Strategy(array(
             "driver" => $this->getMockDriver(array(
                 array(
                     "HTTP_CODE"    => 401,

@@ -27,10 +27,18 @@ use Chatwork\Authentication;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-class Nothing implements Authentication
+class HeaderAuthentication implements Authentication
 {
+    /** @var string $token*/
+    protected $token;
+
+    public function __construct($token)
+    {
+        $this->token = $token;
+    }
+
     public function getAsString()
     {
-        return "";
+        return sprintf("X-ChatWorkToken: %s", $this->token);
     }
 }
