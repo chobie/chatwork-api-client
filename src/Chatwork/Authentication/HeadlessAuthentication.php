@@ -35,9 +35,23 @@ class HeadlessAuthentication implements Authentication
     /** @var string $password */
     protected $password;
 
-    public function __construct($login, $password)
+    public function __construct($login = null, $password = null)
+    {
+        if (!empty($login)) {
+            $this->login = $login;
+        }
+        if (!empty($password)) {
+            $this->password = $password;
+        }
+    }
+
+    public function setLogin($login)
     {
         $this->login = $login;
+    }
+
+    public function setPassword($password)
+    {
         $this->password = $password;
     }
 

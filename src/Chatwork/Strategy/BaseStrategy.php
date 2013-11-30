@@ -1,6 +1,7 @@
 <?php
 namespace Chatwork\Strategy;
 
+use Chatwork\Authentication;
 use \Chatwork\Exception\UnsupportedFeatureException;
 use \Chatwork\Strategy;
 use \Chatwork\Driver;
@@ -46,6 +47,16 @@ abstract class BaseStrategy
 
     public function initiate()
     {
+    }
+
+    public function setAuthentication(Authentication $authentication)
+    {
+        $this->params['authentication'] = $authentication;
+    }
+
+    public function setDriver(Driver $driver)
+    {
+        $this->params['driver'] = $driver;
     }
 
     public function sendMessage($room_id, $message)

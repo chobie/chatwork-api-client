@@ -27,16 +27,12 @@ Example
 ````php
 <?php
 require __DIR__ . DIRECTORY_SEPARATOR . join(DIRECTORY_SEPARATOR, array("vendor", "autoload.php"));
-
 $room_id = "123456768";
 
-$client = new \Chatwork\API\Client();
-$client->setStrategy(new \Chatwork\Strategy\API\V1Strategy(array(
-    "authentication" => new \Chatwork\Authentication\HeaderAuthentication("*********"),
-)));
-$client->registerPlugins(array(
-    // This plugin surrounds your message with [info] tag
-    new \Chatwork\Plugin\Message\SurroundInfoPlugin(),
+use Chatwork\APIFactory;
+
+$client = APIFactory::createInstance(array(
+    "token" => "**********",
 ));
 
 $client->sendMessage($room_id, "Hello World");

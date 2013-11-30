@@ -2,7 +2,7 @@
 namespace Chatwork\Strategy;
 
 use \Chatwork\Authentication\NothingAuthentication;
-use \Chatwork\Authentication\HeadlessAuthentication as Authentication_Headless;
+use \Chatwork\Authentication\HeadlessAuthentication;
 use \Exception;
 use \Chatwork\Strategy;
 use \Chatwork\Driver;
@@ -31,18 +31,18 @@ class HeadlessStrategy
     public function __construct($params = array())
     {
         $this->params = array_merge($this->getDefaultParams(), $params);
-
-        if (!($this->params['authentication'] instanceof Authentication_Headless)) {
-            throw new \InvalidArgumentException(
-                sprintf("headless strategy requires Chatwork\\Authentication\\HeadlessAuthentication %s given",
-                    get_class($this->params['authentication']
-                )
-            ));
-        }
     }
 
     public function initiate()
     {
+        if (!($this->params['authentication'] instanceof HeadlessAuthentication)) {
+            throw new \InvalidArgumentException(
+                sprintf("headless strategy requires Chatwork\\Authentication\\HeadlessAuthentication %s given",
+                    get_class($this->params['authentication']
+                    )
+                ));
+        }
+
         $driver_class = $this->params['driver'];
         if ($driver_class instanceof Driver) {
             $this->driver = $driver_class;
@@ -108,6 +108,11 @@ class HeadlessStrategy
             "package" => "chatwork",
             "args"    => "",
         ));
+
+        if (!$this->params['authentication'] instanceof HeadlessAuthentication) {
+            throw new \InvalidArgumentException("headless strategy requires headless authentication");
+        }
+
         $builder->setPostField(http_build_query(array(
                 'email'      => $this->params['authentication']->getLogin(),
                 'password'   => $this->params['authentication']->getPassword(),
@@ -116,6 +121,7 @@ class HeadlessStrategy
             )
         ));
         $request = $builder->build();
+
         $raw_result = $this->driver->request($request);
         $cookies = array();
         foreach ($raw_result[0] as $key => $value) {

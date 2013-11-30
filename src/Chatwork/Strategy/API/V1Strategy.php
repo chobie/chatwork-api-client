@@ -453,7 +453,7 @@ class V1Strategy
     {
         return array(
             self::PARAM_TOKEN         => null,
-            self::PARAM_AUTHENTICATE => new NothingAuthentication(),
+            self::PARAM_AUTHENTICATE  => new NothingAuthentication(),
             self::PARAM_DRIVER        => "Chatwork\\Driver\\CurlDriver",
             self::PARAM_ENDPOINT      => 'https://api.chatwork.com/',
         );

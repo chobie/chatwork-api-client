@@ -32,7 +32,12 @@ class HeaderAuthentication implements Authentication
     /** @var string $token*/
     protected $token;
 
-    public function __construct($token)
+    public function __construct($token = null)
+    {
+        $this->token = $token;
+    }
+
+    public function setToken($token)
     {
         $this->token = $token;
     }
