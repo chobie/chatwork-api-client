@@ -41,8 +41,9 @@ class APIFactory
             "password"       => "",
             "proxy"          => getenv("HTTP_PROXY"),
             "driver"         => "Chatwork\\Driver\\CurlDriver",
-            "driver_option" => array(
-            )
+            "driver_option"  => array(
+            ),
+            "plugins"        => array(),
         );
 
         $config = array_merge($default_config, $config);
@@ -95,6 +96,14 @@ class APIFactory
         $strategy->setDriver($driver);
 
         $api->setStrategy($strategy);
+
+        foreach ($config['plugins'] as $plugin) {
+            if (is_string($plugin)) {
+                $api->registerPlugins(array(new $plugin()));
+            } else {
+                $api->registerPlugins(array($plugin));
+            }
+        }
 
         return $api;
     }
