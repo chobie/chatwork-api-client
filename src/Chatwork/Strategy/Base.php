@@ -1,7 +1,7 @@
 <?php
 namespace Chatwork\Strategy;
 
-use Chatwork\Exception\UnsupportedFeatureException;
+use \Chatwork\Exception\UnsupportedFeatureException;
 use \Chatwork\Strategy;
 use \Chatwork\Driver;
 

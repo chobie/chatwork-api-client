@@ -1,8 +1,8 @@
 <?php
 namespace Chatwork\Strategy;
 
-use Chatwork\Authentication\Nothing;
-use Chatwork\Authentication\Headless as Authentication_Headless;
+use \Chatwork\Authentication\Nothing;
+use \Chatwork\Authentication\Headless as Authentication_Headless;
 use \Exception;
 use \Chatwork\Strategy;
 use \Chatwork\Driver;

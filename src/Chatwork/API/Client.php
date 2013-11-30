@@ -1,7 +1,7 @@
 <?php
 namespace Chatwork\API;
 
-use Chatwork\Plugin;
+use \Chatwork\Plugin;
 use \Chatwork\Strategy;
 use \Chatwork\Exception\UnsupportedFeatureException;
 

@@ -1,11 +1,11 @@
 <?php
 namespace Chatwork\Strategy\API;
 
-use Chatwork\API\RequestBuilder;
-use Chatwork\Authentication\Nothing;
-use Chatwork\Exception\UnauthorizedException;
-use Chatwork\Strategy;
-use Chatwork\Driver;
+use \Chatwork\API\RequestBuilder;
+use \Chatwork\Authentication\Nothing;
+use \Chatwork\Exception\UnauthorizedException;
+use \Chatwork\Strategy;
+use \Chatwork\Driver;
 
 /**
  * Chatwork API Client

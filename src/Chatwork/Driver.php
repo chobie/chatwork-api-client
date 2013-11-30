@@ -1,7 +1,7 @@
 <?php
 namespace Chatwork;
 
-use Chatwork\API\Request;
+use \Chatwork\API\Request;
 
 /**
  * Chatwork API Client

@@ -1,11 +1,11 @@
 <?php
 namespace Chatwork\Driver;
 
-use Chatwork\API\Request;
-use Chatwork\Authentication\Header;
-use Chatwork\Authentication\Nothing;
+use \Chatwork\API\Request;
+use \Chatwork\Authentication\Header;
+use \Chatwork\Authentication\Nothing;
 use \Chatwork\Driver;
-use Chatwork\Strategy\Headless;
+use \Chatwork\Strategy\Headless;
 
 /**
  * Chatwork API Client
@@ -77,6 +77,7 @@ class CurlDriver
         if ($request->getAuthentication()) {
             $authentication = $request->getAuthentication();
             if ($authentication instanceof Header) {
+                // TODO: should move this block to v1 strategy
                 curl_setopt($curl, CURLOPT_HTTPHEADER, array(
                     $authentication->getAsString(),
                 ));
