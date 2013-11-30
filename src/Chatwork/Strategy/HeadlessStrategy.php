@@ -56,10 +56,15 @@ class HeadlessStrategy
             var_dump($e->getMessage());
             exit;
         }
+        $this->initiate = true;
     }
 
     public function sendMessage($room_id, $message)
     {
+        if (!$this->initiated) {
+            $this->initiate();
+        }
+
         $query = array(
             "cmd"  => "send_chat",
             "myid" => $this->myid,

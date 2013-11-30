@@ -45,6 +45,8 @@ abstract class BaseStrategy
     const PARAM_DRIVER       = "driver";
     const PARAM_AUTHENTICATE = 'authenticate';
 
+    protected $initiated = false;
+
     public function initiate()
     {
     }

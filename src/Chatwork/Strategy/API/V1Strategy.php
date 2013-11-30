@@ -40,6 +40,8 @@ class V1Strategy
     /** @var  Driver $driver */
     protected $driver;
 
+    protected $initiated = false;
+
     public function __construct($params = array())
     {
         $this->params = array_merge($this->getDefaultParams(), $params);
@@ -53,6 +55,8 @@ class V1Strategy
         } else {
             $this->driver = new $driver_class();
         }
+
+        $this->initiated = true;
     }
 
     /**
@@ -430,6 +434,10 @@ class V1Strategy
 
     protected function api($http_method = "GET", $endpoint, $query, $params, $post_field = array())
     {
+        if (!$this->initiated) {
+            $this->initiate();
+        }
+
         $builder = new RequestBuilder();
         $builder->setRequestMethod($http_method);
         $builder->setEndpoint($endpoint);

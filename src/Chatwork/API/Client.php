@@ -4,6 +4,7 @@ namespace Chatwork\API;
 use \Chatwork\Plugin;
 use \Chatwork\Strategy;
 use \Chatwork\Exception\UnsupportedFeatureException;
+use \Chatwork\Exception\UnauthorizedException;
 
 /**
  * Chatwork API Client
@@ -34,9 +35,6 @@ class Client
 {
     /** @var  Strategy */
     protected $strategy;
-
-    /** @var bool initiated flag */
-    protected $initiated = false;
 
     /** @var array plugins */
     protected $plugins = array();
@@ -72,8 +70,6 @@ class Client
      */
     public function sendMessage($room_id, $message)
     {
-        $this->initiateStrategy();
-
         // TODO: improve this block
         foreach ($this->plugins as $plugin) {
             if ($plugin->getType() == Plugin::PLUGIN_TYPE_SEND_MESSAGE) {
@@ -95,7 +91,6 @@ class Client
      */
     public function me()
     {
-        $this->initiateStrategy();
         $result = $this->getStrategy()->me();
 
         return $result;
@@ -110,7 +105,6 @@ class Client
      */
     public function getMyStatus()
     {
-        $this->initiateStrategy();
         $result = $this->getStrategy()->getMyStatus();
 
         return $result;
@@ -126,7 +120,6 @@ class Client
      */
     public function getMyTasks($params = array())
     {
-        $this->initiateStrategy();
         $result = $this->getStrategy()->getMyTasks($params);
 
         return $result;
@@ -141,7 +134,6 @@ class Client
      */
     public function getContacts()
     {
-        $this->initiateStrategy();
         $result = $this->getStrategy()->getContacts();
 
         return $result;
@@ -156,7 +148,6 @@ class Client
      */
     public function getRooms()
     {
-        $this->initiateStrategy();
         $result = $this->getStrategy()->getRooms();
 
         return $result;
@@ -182,7 +173,6 @@ class Client
          * members_readonly_ids
          * description
          */
-        $this->initiateStrategy();
         $result = $this->getStrategy()->createRoom($name, $members_admin_ids, $params);
 
         return $result;
@@ -198,7 +188,6 @@ class Client
      */
     public function getRoomById($room_id)
     {
-        $this->initiateStrategy();
         $result = $this->getStrategy()->getRoomById($room_id);
 
         return $result;
@@ -215,7 +204,6 @@ class Client
      */
     public function updateRoomInfo($room_id, $params = array())
     {
-        $this->initiateStrategy();
         $result = $this->getStrategy()->updateRoomInfo($room_id, $params);
 
         return $result;
@@ -231,7 +219,6 @@ class Client
      */
     public function deleteRoom($room_id)
     {
-        $this->initiateStrategy();
         $result = $this->getStrategy()->deleteRoom($room_id);
 
         return $result;
@@ -247,7 +234,6 @@ class Client
      */
     public function leaveRoom($room_id)
     {
-        $this->initiateStrategy();
         $result = $this->getStrategy()->leaveRoom($room_id);
 
         return $result;
@@ -265,7 +251,6 @@ class Client
      */
     public function updateRoomMembers($room_id, $members_admin_ids, $params = array())
     {
-        $this->initiateStrategy();
         $result = $this->getStrategy()->updateRoomMembers($room_id, $members_admin_ids, $params);
 
         return $result;
@@ -281,7 +266,6 @@ class Client
      */
     public function getRoomMessage($room_id)
     {
-        $this->initiateStrategy();
         $result = $this->getStrategy()->getRoomMessage($room_id);
 
         return $result;
@@ -298,7 +282,6 @@ class Client
      */
     public function getRoomMessageByMessageId($room_id, $message_id)
     {
-        $this->initiateStrategy();
         $result = $this->getStrategy()->getRoomMessageByMessageId($room_id, $message_id);
 
         return $result;
@@ -315,7 +298,6 @@ class Client
      */
     public function getRoomTasks($room_id, $params = array())
     {
-        $this->initiateStrategy();
         $result = $this->getStrategy()->getRoomTasks($room_id, $params);
 
         return $result;
@@ -332,7 +314,6 @@ class Client
      */
     public function getRoomTaskById($room_id, $task_id)
     {
-        $this->initiateStrategy();
         $result = $this->getStrategy()->getRoomTaskById($room_id, $task_id);
 
         return $result;
@@ -349,7 +330,6 @@ class Client
      */
     public function getRoomFiles($room_id, $params = array())
     {
-        $this->initiateStrategy();
         $result = $this->getStrategy()->getRoomFiles($room_id, $params);
 
         return $result;
@@ -367,7 +347,6 @@ class Client
      */
     public function getRoomFileById($room_id, $file_id, $create_download_url = false)
     {
-        $this->initiateStrategy();
         $result = $this->getStrategy()->getRoomFileById($room_id, $file_id, $create_download_url);
 
         return $result;
@@ -386,16 +365,8 @@ class Client
      */
     public function addTask($room_id, $to_ids = array(), $body, $limit = null)
     {
-        $this->initiateStrategy();
         $result = $this->getStrategy()->addTask($room_id, $to_ids, $body, $limit);
 
         return $result;
-    }
-
-    protected function initiateStrategy()
-    {
-        if (!$this->initiated) {
-            $this->strategy->initiate();
-        }
     }
 }
