@@ -22,13 +22,11 @@ composer.json
 }
 ````
 
-
 Example
 
 ````php
 <?php
-require dirname(__DIR__) . DIRECTORY_SEPARATOR . join(DIRECTORY_SEPARATOR, array("src", "Chatwork", "Autoloader.php"));
-\Chatwork\Autoloader::register();
+require __DIR__ . DIRECTORY_SEPARATOR . join(DIRECTORY_SEPARATOR, array("vendor", "autoload.php"));
 
 $room_id = "123456768";
 
@@ -43,7 +41,6 @@ $client->registerPlugins(array(
 
 $client->sendMessage($room_id, "Hello World");
 ````
-
 
 Requirements
 ------------
@@ -68,7 +65,6 @@ OpenSSL support => enabled
 OpenSSL Library Version => OpenSSL 0.9.8o 01 Jun 2010
 OpenSSL Header Version => OpenSSL 0.9.8o 01 Jun 2010
 ````
-
 
 LICENSE
 -------
