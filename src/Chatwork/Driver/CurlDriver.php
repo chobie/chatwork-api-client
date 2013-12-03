@@ -45,10 +45,10 @@ class CurlDriver
         curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie_file);
         curl_setopt($ch ,CURLOPT_HTTPHEADER, array());
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HEADER, 1);
+        //curl_setopt($ch, CURLOPT_HEADER, 1);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36");
-        curl_setopt($ch, CURLOPT_VERBOSE, 1);
+        //curl_setopt($ch, CURLOPT_VERBOSE, 1);
 
         $this->curl = $ch;
     }
@@ -73,6 +73,7 @@ class CurlDriver
             $url .= "?" . http_build_query($params);
         }
         curl_setopt($curl, CURLOPT_URL, $url);
+        //curl_setopt($curl, CURLINFO_HEADER_OUT, true);
 
         if ($request->getAuthentication()) {
             $authentication = $request->getAuthentication();

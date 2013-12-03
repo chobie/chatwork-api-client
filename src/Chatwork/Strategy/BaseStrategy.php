@@ -43,7 +43,7 @@ abstract class BaseStrategy
     const PARAM_ENDPOINT     = 'endpoint';
     const PARAM_TOKEN        = "token";
     const PARAM_DRIVER       = "driver";
-    const PARAM_AUTHENTICATE = 'authenticate';
+    const PARAM_AUTHENTICATE = 'authentication';
 
     protected $initiated = false;
 

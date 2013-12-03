@@ -437,14 +437,13 @@ class V1Strategy
         if (!$this->initiated) {
             $this->initiate();
         }
-
         $builder = new RequestBuilder();
         $builder->setRequestMethod($http_method);
         $builder->setEndpoint($endpoint);
         $builder->setQuery($query);
         $builder->setQueryParams($params);
         $builder->setPostField($post_field);
-        $builder->setAuthentication($this->params['authenticate']);
+        $builder->setAuthentication($this->params['authentication']);
         $request = $builder->build();
         $res = $this->driver->request($request);
 

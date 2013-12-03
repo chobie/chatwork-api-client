@@ -78,6 +78,7 @@ class RequestBuilder
             "query_params"   => $this->query_params,
             "endpoint"       => $this->endpoint,
             "post_field"     => $this->post_field,
+            "authentication" => $this->authentication,
         ));
 
         return $request;

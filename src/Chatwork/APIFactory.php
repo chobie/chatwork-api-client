@@ -78,7 +78,7 @@ class APIFactory
             $authentication = new $authentication_class($api);
 
             if ($authentication instanceof \Chatwork\Authentication\HeaderAuthentication) {
-                $authentication->setToken($config['api_key']);
+                $authentication->setToken($config['token']);
             } else if ($authentication instanceof \Chatwork\Authentication\HeadlessAuthentication) {
                 $authentication->setLogin($config['login']);
                 $authentication->setPassword($config['password']);
