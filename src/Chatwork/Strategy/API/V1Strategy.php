@@ -308,6 +308,13 @@ class V1Strategy
         $parmas = array_merge(array(
             "members_admin_ids" => $members_admin_ids,
         ), $params);
+        $params['members_admin_ids'] = join(",", $params['members_admin_ids']);
+        if (isset($params['members_member_ids'])) {
+            $params['members_member_ids'] = join(",", $params['members_member_ids']);
+        }
+        if (isset($params['members_readonly_ids'])) {
+            $params['members_readonly_ids'] = join(",", $params['members_readonly_ids']);
+        }
 
         return $this->api(
             self::HTTP_METHOD_PUT,
