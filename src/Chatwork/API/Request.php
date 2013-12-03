@@ -1,6 +1,8 @@
 <?php
 namespace Chatwork\API;
 
+use Chatwork\Authentication;
+
 class Request
 {
     /** @var string $request_method */
@@ -30,12 +32,17 @@ class Request
     /** @var  string $user_agent */
     protected $user_agent;
 
+    /** @var  string $content_body */
     protected $content_body;
 
+    /** @var array $headers */
     protected $headers = array();
 
     /** @var  string $proxy */
     protected $proxy;
+
+    /** @var  string $url */
+    protected $url;
 
     public function __construct($params = array())
     {

@@ -4,6 +4,9 @@ namespace Chatwork\API;
 use \Chatwork\Authentication;
 use \Chatwork\API\Request;
 use \Chatwork\Authentication\HeaderAuthentication;
+use \Chatwork\Authentication\HeadlessAuthentication;
+use Chatwork\Driver;
+use Chatwork\Strategy;
 
 class RequestBuilder
 {
@@ -71,17 +74,12 @@ class RequestBuilder
         $this->authentication = $authentication;
     }
 
-    public function build()
+    public function build(Strategy $strategy, Driver $driver)
     {
-        $data = http_build_query($this->post_field);
+        $data = null;
         $headers = array();
-
-        if ($this->request_method != "GET") {
-            $headers['Content-Type'] = "application/x-www-form-urlencoded";
-            $headers['Content-Length'] = strlen($data);
-        }
-
         $authentication = $this->authentication;
+
         if ($this->authentication && $authentication instanceof HeaderAuthentication) {
             /* @var HeaderAuthentication $authentication */
             $headers[$authentication->getHeaderKey()] = $authentication->getToken();
@@ -91,6 +89,33 @@ class RequestBuilder
             $url = sprintf("%s%s", $this->endpoint, $this->query . "?" . http_build_query($this->query_params));
         } else {
             $url = sprintf("%s%s", $this->endpoint, $this->query);
+        }
+
+        if ($authentication) {
+            if ($driver instanceof Driver\CurlDriver) {
+                if ($authentication instanceof HeaderAuthentication) {
+                    /* Nothing to do. */
+                } else if ($authentication instanceof HeadlessAuthentication) {
+                    if ($this->query == "/login.php") {
+                        $this->post_field = array(
+                            'email'      => $authentication->getLogin(),
+                            'password'   => $authentication->getPassword(),
+                            'auto_login' => "on",
+                            'login'      => 'Login',
+                        );
+                    }
+                } else {
+                    throw new \RuntimeException(sprintf("CurlDriver does not support %s authentication", get_class($authentication)));
+                }
+            } else if ($driver instanceof Driver\StreamSocketDriver) {
+                /* Nothing to do. */
+            }
+        }
+
+        if ($this->request_method != "GET") {
+            $data = http_build_query($this->post_field);
+            $headers['Content-Type'] = "application/x-www-form-urlencoded";
+            $headers['Content-Length'] = strlen($data);
         }
 
         $request = new Request(array(
@@ -105,7 +130,6 @@ class RequestBuilder
             "headers"        => $headers,
             "url"            => $url,
         ));
-
 
         return $request;
     }

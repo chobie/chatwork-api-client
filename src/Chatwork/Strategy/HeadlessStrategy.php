@@ -74,7 +74,7 @@ class HeadlessStrategy
             "ln"   => "en"
         );
 
-        $post = http_build_query(array(
+        $post = array(
             "pdata" => json_encode(array(
                 "text"         => $message,
                 "room_id"      => (string)$room_id,
@@ -82,7 +82,7 @@ class HeadlessStrategy
                 "read"         => 1,
                 "edit_id"      => 0,
             ))
-        ));
+        );
 
         $builder = new RequestBuilder();
         $builder->setRequestMethod("POST");
@@ -90,7 +90,7 @@ class HeadlessStrategy
         $builder->setQuery("/gateway.php");
         $builder->setQueryParams($query);
         $builder->setPostField($post);
-        $request = $builder->build();
+        $request = $builder->build($this, $this->driver);
 
         $res = $this->driver->request($request);
 
@@ -113,6 +113,7 @@ class HeadlessStrategy
             "package" => "chatwork",
             "args"    => "",
         ));
+        $builder->setAuthentication($this->params['authentication']);
 
         if (!$this->params['authentication'] instanceof HeadlessAuthentication) {
             throw new \InvalidArgumentException("headless strategy requires headless authentication");
@@ -121,15 +122,7 @@ class HeadlessStrategy
             throw new \InvalidArgumentException("headless strategy expects curl driver");
         }
 
-        $builder->setPostField(http_build_query(array(
-                'email'      => $this->params['authentication']->getLogin(),
-                'password'   => $this->params['authentication']->getPassword(),
-                'auto_login' => "on",
-                'login'      => 'Login',
-            )
-        ));
-        $request = $builder->build();
-
+        $request = $builder->build($this, $this->driver);
         $raw_result = $this->driver->request($request);
         $cookies = array();
         foreach ($raw_result[0] as $key => $value) {

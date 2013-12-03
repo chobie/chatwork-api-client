@@ -484,7 +484,7 @@ class V1Strategy
         $builder->setQueryParams($params);
         $builder->setPostField($post_field);
         $builder->setAuthentication($this->params['authentication']);
-        $request = $builder->build();
+        $request = $builder->build($this, $this->driver);
 
         $res = $this->driver->request($request);
 

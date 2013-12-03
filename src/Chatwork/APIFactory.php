@@ -35,28 +35,29 @@ class APIFactory
     public static function createInstance($config = array())
     {
         $default_config = array(
-            "endpoint"       => "https://www.chatwork.com/",
+            "endpoint"       => "https://api.chatwork.com",
             "authentication" => "\\Chatwork\\Authentication\\HeaderAuthentication",
             "strategy"       => "\\Chatwork\\Strategy\\API\\V1Strategy",
             "token"          => "",
             "login"          => "",
             "password"       => "",
             "proxy"          => getenv("HTTP_PROXY"),
-            "driver"         => "Chatwork\\Driver\\CurlDriver",
+            "driver"         => Util::getDefaultDriverName(),
             "driver_option"  => array(
             ),
             "plugins"        => array(),
+            "s"              => null,
         );
 
         $config = array_merge($default_config, $config);
-        if ($config['driver'] == "Chatwork\\Driver\\CurlDriver") {
+        if (Util::isInstanceOf($config['driver'], "Chatwork\\Driver\\CurlDriver")) {
             if (!extension_loaded("curl")) {
                 throw new \RuntimeException("your php does not support curl. please rebuild php");
             }
             if (!extension_loaded("openssl")) {
                 throw new \RuntimeException("curl requires openssl extension. please rebuild php");
             }
-        } else if ($config['driver'] == "Chatwork\\Driver\\StreamSocketDriver") {
+        } else if (Util::isInstanceOf($config['driver'], "Chatwork\\Driver\\StreamSocketDriver")) {
             if (!in_array("ssl", stream_get_transports())) {
                 throw new \RuntimeException("stream socket must support ssl transport. please rebuild php");
             }
@@ -100,7 +101,7 @@ class APIFactory
         $driver = new $driver_class();
 
         $strategy_class = $config['strategy'];
-        $strategy = new $strategy_class();
+        $strategy = new $strategy_class($config);
         /** @var \Chatwork\Strategy $strategy */
 
         $strategy->setAuthentication($authentication);

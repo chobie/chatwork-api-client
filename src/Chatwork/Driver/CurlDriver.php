@@ -64,6 +64,11 @@ class CurlDriver
         );
     }
 
+    public function setOption(\Closure $closure)
+    {
+        $closure($this->curl);
+    }
+
     protected function requestImpl($http_method = "GET", $endpoint, $query, $params, $post_field = array(), Request $request)
     {
         //$curl = curl_copy_handle($this->curl);
@@ -75,40 +80,26 @@ class CurlDriver
         curl_setopt($curl, CURLOPT_URL, $url);
         //curl_setopt($curl, CURLINFO_HEADER_OUT, true);
 
-        if ($request->getAuthentication()) {
-            $authentication = $request->getAuthentication();
-            if ($authentication instanceof HeaderAuthentication) {
-                // TODO: should move this block to v1 strategy
-                curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-                    $authentication->getAsString(),
-                ));
-            } else if ($authentication instanceof NothingAuthentication || $authentication instanceof HeadlessStrategy) {
-                // NothingAuthentication to do.
-            } else {
-                throw new \RuntimeException(sprintf("CurlDriver does not support %s authentication", get_class($authentication)));
+        $headers = array();
+        foreach ($request->getHeaders() as $key => $value) {
+            if ($key == "Content-Length") {
+                continue;
             }
+            $headers[] = sprintf("%s: %s", $key, $value);
         }
 
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         if ($http_method == "POST") {
             curl_setopt($curl, CURLOPT_POST, 1);
-            if ($post_field) {
-                $post_data = http_build_query($post_field);
-                curl_setopt($curl, CURLOPT_POSTFIELDS, $post_data);
-            }
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $request->getContentBody());
         } else if ($http_method == "GET") {
             curl_setopt($curl, CURLOPT_HTTPGET, 1);
         } else if ($http_method == 'PUT') {
             curl_setopt($curl, CURLOPT_PUT, 1);
-            if ($post_field) {
-                $post_data = http_build_query($post_field);
-                curl_setopt($curl, CURLOPT_POSTFIELDS, $post_data);
-            }
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $request->getContentBody());
         } else if ($http_method == 'DELETE') {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
-            if ($post_field) {
-                $post_data = http_build_query($post_field);
-                curl_setopt($curl, CURLOPT_POSTFIELDS, $post_data);
-            }
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $request->getContentBody());
         } else {
             throw new \Exception("unsupported httpd method: " . $http_method);
         }
