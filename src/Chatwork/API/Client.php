@@ -194,6 +194,21 @@ class Client
     }
 
     /**
+     * get specified room members
+     *
+     * @param string $room_id
+     * @return array
+     * @throws UnauthorizedException
+     * @see http://developer.chatwork.com/ja/endpoint_rooms.html#GET-rooms-room_id-members
+     */
+    public function getRoomMembersById($room_id)
+    {
+        $result = $this->getStrategy()->getRoomMembersById($room_id);
+
+        return $result;
+    }
+
+    /**
      * update room meta information
      *
      * @param       $room_id

@@ -123,7 +123,7 @@ class V1Strategy
     {
         return $this->api(self::HTTP_METHOD_GET,
             $this->params[self::PARAM_ENDPOINT],
-            '/v1/my/status',
+            '/v1/my/tasks',
             $params
         );
     }
@@ -174,6 +174,17 @@ class V1Strategy
      */
     public function createRoom($name, $members_admin_ids = array(), $params = array())
     {
+        $params['members_admin_ids'] = $members_admin_ids;
+        $params['name'] = $name;
+
+        $params['members_admin_ids'] = join(",", $params['members_admin_ids']);
+        if (isset($params['members_members_id'])) {
+            $params['members_members_id'] = join(",", $params['members_members_id']);
+        }
+        if (isset($params['members_readonly_ids'])) {
+            $params['members_readonly_ids'] = join(",", $params['members_readonly_ids']);
+        }
+
         return $this->api(
             self::HTTP_METHOD_POST,
             $this->params[self::PARAM_ENDPOINT],
@@ -200,6 +211,25 @@ class V1Strategy
             array()
         );
     }
+
+    /**
+     * get specified room members
+     *
+     * @param string $room_id
+     * @return array
+     * @throws UnauthorizedException
+     * @see http://developer.chatwork.com/ja/endpoint_rooms.html#GET-rooms-room_id-members
+     */
+    public function getRoomMembersById($room_id)
+    {
+        return $this->api(
+            self::HTTP_METHOD_GET,
+            $this->params[self::PARAM_ENDPOINT],
+            sprintf('/v1/rooms/%d/members', $room_id),
+            array()
+        );
+    }
+
 
     /**
      * update room meta information
@@ -301,7 +331,7 @@ class V1Strategy
         return $this->api(
             self::HTTP_METHOD_GET,
             $this->params[self::PARAM_ENDPOINT],
-            sprintf('/v1/rooms/%d', $room_id),
+            sprintf('/v1/rooms/%d/messages', $room_id),
             array()
         );
     }
@@ -418,7 +448,7 @@ class V1Strategy
     public function addTask($room_id, $to_ids = array(), $body, $limit = null)
     {
         $params = array(
-            "to_ids" => $to_ids,
+            "to_ids" => join(",", $to_ids),
             "body"   => $body,
             "limit"  => $limit,
         );
@@ -447,9 +477,12 @@ class V1Strategy
         $request = $builder->build();
         $res = $this->driver->request($request);
 
-        if ($res[0]['HTTP_CODE'] == 401) {
+        if (strpos($res[0]['HTTP_CODE'], "40") === 0) {
             $response = json_decode($res[1], true);
             throw new UnauthorizedException("errors: " . join(PHP_EOL, $response['errors']));
+        } else if (strpos($res[0]['HTTP_CODE'], "50") === 0) {
+            $response = json_decode($res[1], true);
+            throw new \RuntimeException("errors: " . join(PHP_EOL, $response['errors']));
         }
 
         return json_decode($res[1], true);

@@ -101,6 +101,12 @@ abstract class BaseStrategy
         throw new UnsupportedFeatureException(sprintf("Strategy class %s does not support %s method yet", __CLASS__, __METHOD__));
     }
 
+    public function getRoomMembersById($room_id)
+    {
+        throw new UnsupportedFeatureException(sprintf("Strategy class %s does not support %s method yet", __CLASS__, __METHOD__));
+    }
+
+
     public function updateRoomInfo($room_id, $params = array())
     {
         throw new UnsupportedFeatureException(sprintf("Strategy class %s does not support %s method yet", __CLASS__, __METHOD__));

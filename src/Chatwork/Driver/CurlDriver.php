@@ -48,7 +48,7 @@ class CurlDriver
         curl_setopt($ch, CURLOPT_HEADER, 1);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36");
-        //curl_setopt($ch, CURLOPT_VERBOSE, 1);
+        //curl_setopt($ch, CURLOPT_VERBOSE, true);
 
         $this->curl = $ch;
     }
@@ -92,19 +92,22 @@ class CurlDriver
         if ($http_method == "POST") {
             curl_setopt($curl, CURLOPT_POST, 1);
             if ($post_field) {
-                curl_setopt($curl, CURLOPT_POSTFIELDS, $post_field);
+                $post_data = http_build_query($post_field);
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $post_data);
             }
         } else if ($http_method == "GET") {
             curl_setopt($curl, CURLOPT_HTTPGET, 1);
         } else if ($http_method == 'PUT') {
             curl_setopt($curl, CURLOPT_PUT, 1);
             if ($post_field) {
-                curl_setopt($curl, CURLOPT_POSTFIELDS, $post_field);
+                $post_data = http_build_query($post_field);
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $post_data);
             }
         } else if ($http_method == 'DELETE') {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
             if ($post_field) {
-                curl_setopt($curl, CURLOPT_POSTFIELDS, $post_field);
+                $post_data = http_build_query($post_field);
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $post_data);
             }
         } else {
             throw new \Exception("unsupported httpd method: " . $http_method);
