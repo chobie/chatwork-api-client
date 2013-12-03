@@ -308,7 +308,10 @@ class V1Strategy
         $params = array_merge(array(
             "members_admin_ids" => $members_admin_ids,
         ), $params);
-        $params['members_admin_ids'] = join(",", $params['members_admin_ids']);
+
+        if (isset($params['members_member_ids'])) {
+            $params['members_admin_ids'] = join(",", $params['members_admin_ids']);
+        }
         if (isset($params['members_member_ids'])) {
             $params['members_member_ids'] = join(",", $params['members_member_ids']);
         }
