@@ -117,6 +117,9 @@ class HeadlessStrategy
         if (!$this->params['authentication'] instanceof HeadlessAuthentication) {
             throw new \InvalidArgumentException("headless strategy requires headless authentication");
         }
+        if (!($this->driver instanceof Driver\CurlDriver)) {
+            throw new \InvalidArgumentException("headless strategy expects curl driver");
+        }
 
         $builder->setPostField(http_build_query(array(
                 'email'      => $this->params['authentication']->getLogin(),
@@ -157,7 +160,7 @@ class HeadlessStrategy
             "s"              => null,
             "authentication" => new NothingAuthentication(),
             "driver"         => "Chatwork\\Driver\\CurlDriver",
-            "endpoint"       => 'https://www.chatwork.com/',
+            "endpoint"       => 'https://www.chatwork.com',
         );
     }
 }

@@ -72,6 +72,24 @@ class RequestBuilder
 
     public function build()
     {
+        $data = http_build_query($this->post_field);
+        $headers = array();
+
+        if ($this->request_method != "GET") {
+            $headers['Content-Type'] = "application/x-www-form-urlencoded";
+            $headers['Content-Length'] = strlen($data);
+        }
+
+        if ($this->authentication && $this->authentication instanceof Authentication\HeaderAuthentication) {
+            $headers[$this->authentication->getHeaderKey()] = $this->authentication->getToken();
+        }
+
+        if ($this->query_params) {
+            $url = sprintf("%s%s", $this->endpoint, $this->query . "?" . http_build_query($this->query_params));
+        } else {
+            $url = sprintf("%s%s", $this->endpoint, $this->query);
+        }
+
         $request = new Request(array(
             "request_method" => $this->request_method,
             "query"          => $this->query,
@@ -79,7 +97,12 @@ class RequestBuilder
             "endpoint"       => $this->endpoint,
             "post_field"     => $this->post_field,
             "authentication" => $this->authentication,
+            "content_body"   => $data,
+            "proxy"          => null,
+            "headers"        => $headers,
+            "url"            => $url,
         ));
+
 
         return $request;
     }

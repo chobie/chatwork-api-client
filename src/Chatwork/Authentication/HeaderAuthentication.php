@@ -42,8 +42,18 @@ class HeaderAuthentication implements Authentication
         $this->token = $token;
     }
 
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    public function getHeaderKey()
+    {
+        return "X-ChatWorkToken";
+    }
+
     public function getAsString()
     {
-        return sprintf("X-ChatWorkToken: %s", $this->token);
+        return sprintf("%s: %s", $this->getHeaderKey(), $this->token);
     }
 }

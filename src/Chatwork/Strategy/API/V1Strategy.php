@@ -485,6 +485,7 @@ class V1Strategy
         $builder->setPostField($post_field);
         $builder->setAuthentication($this->params['authentication']);
         $request = $builder->build();
+
         $res = $this->driver->request($request);
 
         if (strpos($res[0]['HTTP_CODE'], "40") === 0) {
@@ -505,7 +506,7 @@ class V1Strategy
             self::PARAM_TOKEN         => null,
             self::PARAM_AUTHENTICATE  => new NothingAuthentication(),
             self::PARAM_DRIVER        => "Chatwork\\Driver\\CurlDriver",
-            self::PARAM_ENDPOINT      => 'https://api.chatwork.com/',
+            self::PARAM_ENDPOINT      => 'https://api.chatwork.com',
         );
     }
 }

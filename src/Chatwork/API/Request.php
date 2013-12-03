@@ -30,6 +30,10 @@ class Request
     /** @var  string $user_agent */
     protected $user_agent;
 
+    protected $content_body;
+
+    protected $headers = array();
+
     /** @var  string $proxy */
     protected $proxy;
 
@@ -118,6 +122,37 @@ class Request
     public function getUserAgent()
     {
         return $this->user_agent;
+    }
+
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    public function getHeadersAsString()
+    {
+        $buffer = array();
+        foreach ($this->getHeaders() as $key => $value) {
+            $buffer[] = sprintf("%s: %s", $key, $value);
+        }
+
+        return join("\r\n", $buffer);
+
+    }
+
+    public function getHeaders()
+    {
+        return $this->headers;
+    }
+
+    public function getContentBody()
+    {
+        return $this->content_body;
+    }
+
+    public function hasProxy()
+    {
+        return false;
     }
 
 }
