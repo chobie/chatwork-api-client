@@ -3,6 +3,7 @@ namespace Chatwork\API;
 
 use \Chatwork\Authentication;
 use \Chatwork\API\Request;
+use \Chatwork\Authentication\HeaderAuthentication;
 
 class RequestBuilder
 {
@@ -80,8 +81,10 @@ class RequestBuilder
             $headers['Content-Length'] = strlen($data);
         }
 
-        if ($this->authentication && $this->authentication instanceof Authentication\HeaderAuthentication) {
-            $headers[$this->authentication->getHeaderKey()] = $this->authentication->getToken();
+        $authentication = $this->authentication;
+        if ($this->authentication && $authentication instanceof HeaderAuthentication) {
+            /* @var HeaderAuthentication $authentication */
+            $headers[$authentication->getHeaderKey()] = $authentication->getToken();
         }
 
         if ($this->query_params) {

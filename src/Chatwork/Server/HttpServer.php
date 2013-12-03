@@ -105,7 +105,7 @@ class HttpServer
 
     public function listen($port)
     {
-        printf("# server listend at $port\n");
+        printf("# server listened at $port\n");
 
         uv_tcp_nodelay($this->server, 1);
         uv_tcp_bind($this->server, uv_ip4_addr("0.0.0.0", $port));

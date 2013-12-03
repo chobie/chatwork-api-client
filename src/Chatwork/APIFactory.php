@@ -2,6 +2,8 @@
 namespace Chatwork;
 
 use \Chatwork\API\Client;
+use \Chatwork\Authentication\HeaderAuthentication;
+use \Chatwork\Authentication\HeadlessAuthentication;
 
 /**
  * Chatwork API Client
@@ -84,9 +86,9 @@ class APIFactory
         if (is_string($authentication_class)) {
             $authentication = new $authentication_class($api);
 
-            if ($authentication instanceof \Chatwork\Authentication\HeaderAuthentication) {
+            if ($authentication instanceof HeaderAuthentication) {
                 $authentication->setToken($config['token']);
-            } else if ($authentication instanceof \Chatwork\Authentication\HeadlessAuthentication) {
+            } else if ($authentication instanceof HeadlessAuthentication) {
                 $authentication->setLogin($config['login']);
                 $authentication->setPassword($config['password']);
             }
