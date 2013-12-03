@@ -305,7 +305,7 @@ class V1Strategy
      */
     public function updateRoomMembers($room_id, $members_admin_ids = array(), $params = array())
     {
-        $parmas = array_merge(array(
+        $params = array_merge(array(
             "members_admin_ids" => $members_admin_ids,
         ), $params);
         $params['members_admin_ids'] = join(",", $params['members_admin_ids']);
