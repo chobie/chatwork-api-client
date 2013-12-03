@@ -62,7 +62,7 @@ OpenSSL Library Version => OpenSSL 0.9.8o 01 Jun 2010
 OpenSSL HeaderAuthentication Version => OpenSSL 0.9.8o 01 Jun 2010
 ````
 
-* libuv extension
+* (optional) libuv extension
 
 LICENSE
 -------

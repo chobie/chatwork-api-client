@@ -54,6 +54,13 @@ class APIFactory
             if (!extension_loaded("openssl")) {
                 throw new \RuntimeException("curl requires openssl extension. please rebuild php");
             }
+        } else if ($config['driver'] == "Chatwork\\Driver\\StreamSocketDriver") {
+            if (!in_array("ssl", stream_get_transports())) {
+                throw new \RuntimeException("stream socket must support ssl transport. please rebuild php");
+            }
+            if (ini_get("allow_url_fopen") == false) {
+                throw new \RuntimeException("stream socket requires `allow_url_fopen`. please check your php.ini");
+            }
         }
 
         if (!empty($config['proxy'])) {
