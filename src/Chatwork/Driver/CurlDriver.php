@@ -45,7 +45,7 @@ class CurlDriver
         curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie_file);
         curl_setopt($ch ,CURLOPT_HTTPHEADER, array());
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        //curl_setopt($ch, CURLOPT_HEADER, 1);
+        curl_setopt($ch, CURLOPT_HEADER, 1);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36");
         //curl_setopt($ch, CURLOPT_VERBOSE, 1);
@@ -95,7 +95,7 @@ class CurlDriver
                 curl_setopt($curl, CURLOPT_POSTFIELDS, $post_field);
             }
         } else if ($http_method == "GET") {
-            curl_setopt($curl, CURLOPT_GET, 1);
+            curl_setopt($curl, CURLOPT_HTTPGET, 1);
         } else if ($http_method == 'PUT') {
             curl_setopt($curl, CURLOPT_PUT, 1);
             if ($post_field) {
