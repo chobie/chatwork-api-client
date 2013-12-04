@@ -45,7 +45,7 @@ class Util
                 $retval = true;
             }
         } else {
-            $klazz = get_cass($class);
+            $klazz = get_class($class);
             if ($klazz == $instanceof) {
                 $retval = true;
             }

@@ -36,6 +36,9 @@ $client = \Chatwork\APIFactory::createInstance(array(
     "plugins" => array('Chatwork\Plugin\Message\SurroundInfoPlugin'),
 ));
 
+$timer = uv_timer_init();
+$loop = uv_default_loop();
+
 $queue     = new SplQueue();
 $processor = new Chatwork\Server\QueueProcessor($loop, $timer, $queue);
 
@@ -52,7 +55,6 @@ foreach ($config['plugins'] as $plugin_class) {
     unset($plugin_klass);
 }
 
-$timer = uv_timer_init();
 uv_timer_start($timer, SECONDS_MS, SECONDS_MS, array($processor, "process"));
 
 function createServer(Closure $closure)
@@ -64,7 +66,7 @@ function createServer(Closure $closure)
 }
 
 /* やっつけ */
-createServer(function($request, $response, $client) use($queue, $config){
+createServer(function($request, \Chatwork\Server\HttpResponse $response, $client) use($queue, $config){
     parse_str(ltrim($request['QUERY_STRING'], "/?"), $params);
     if (trim($request['QUERY_STRING'], "/") == "favicon.ico") {
         $response->writeHead(HTTP_STATUS_FORBIDDEN, array(

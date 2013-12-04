@@ -56,7 +56,7 @@ class HeadlessStrategy
             var_dump($e->getMessage());
             exit;
         }
-        $this->initiate = true;
+        $this->initiated = true;
     }
 
     public function sendMessage($room_id, $message)

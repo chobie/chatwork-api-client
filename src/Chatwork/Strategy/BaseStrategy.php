@@ -47,6 +47,8 @@ abstract class BaseStrategy
 
     protected $initiated = false;
 
+    protected $params = array();
+
     public function initiate()
     {
     }

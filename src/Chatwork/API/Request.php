@@ -60,7 +60,7 @@ class Request
     }
 
     /**
-     * @return \Chatwork\API\Authentication
+     * @return Authentication
      */
     public function getAuthentication()
     {

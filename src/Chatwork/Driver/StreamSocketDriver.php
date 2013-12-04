@@ -66,7 +66,6 @@ class StreamSocketDriver
         }
 
         $headers      = array();
-        $this->socket = $socket;
         $meta_data    = stream_get_meta_data($socket);
         if (isset($meta_data['wrapper_data'])) {
             foreach ($meta_data['wrapper_data'] as $value) {
@@ -81,7 +80,7 @@ class StreamSocketDriver
         }
 
         if ($headers['HTTP_CODE'][0] != 2) {
-            throw new \Exception(sprintf("API Server returns %s code: %s", $headers['HTTP_STATUS'], fread($this->socket, 8192)));
+            throw new \Exception(sprintf("API Server returns %s code: %s", $headers['HTTP_STATUS'], fread($socket, 8192)));
         }
 
         $data = stream_get_contents($socket);
