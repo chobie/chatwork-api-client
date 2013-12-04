@@ -83,6 +83,7 @@ class CurlDriver
         $headers = array();
         foreach ($request->getHeaders() as $key => $value) {
             if ($key == "Content-Length") {
+                /* Note: curl don't need content length as calculate itself */
                 continue;
             }
             $headers[] = sprintf("%s: %s", $key, $value);
