@@ -67,6 +67,7 @@ class Client
      * @param $message
      *
      * @see http://developer.chatwork.com/ja/endpoint_rooms.html#POST-rooms-room_id-messages
+     * @return array
      */
     public function sendMessage($room_id, $message)
     {
