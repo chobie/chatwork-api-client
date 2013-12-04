@@ -1,7 +1,8 @@
 <?php
-namespace Chatwork\Server\Plugin;
-use Chatwork\Server\ControllerCollection;
-use Chatwork\Server\Kernel;
+namespace Chatwork\Server;
+
+use Chatwork\Exception\RouteNotFoundException;
+use Chatwork\Server\Route;
 
 /**
  * Chatwork API Client
@@ -28,21 +29,24 @@ use Chatwork\Server\Kernel;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-class SendMessagePlugin
+class Router
 {
-    protected $client;
+    protected $routes = array();
 
-    protected $stat;
-
-    public function __construct($container)
+    public function add(Route $route)
     {
-        $this->client = $container['chatwork'];
-        $this->stat   = $container['stat'];
+        $this->routes[] = $route;
     }
 
-    public function execute($room_id, $message)
+    public function execute($query_string, $request, $params)
     {
-        $this->client->sendMessage($room_id, $message);
-        $this->stat->increment("message.success");
+        foreach ($this->routes as $route) {
+            /** @var Route $route  */
+
+            if ($route->match($query_string)) {
+                return $route->dispatch($request, $params);
+            }
+        }
+        throw new RouteNotFoundException(sprintf("%s does not match rules", $query_string));
     }
 }

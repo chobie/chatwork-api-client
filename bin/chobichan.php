@@ -3,19 +3,16 @@ require dirname(__DIR__) . DIRECTORY_SEPARATOR . join(DIRECTORY_SEPARATOR, array
 Chatwork\Autoloader::register();
 
 date_default_timezone_set("Asia/Tokyo");
-
-define("HTTP_STATUS_OK", 200);
-define("HTTP_STATUS_FORBIDDEN", 403);
 define("SECONDS_MS", 1000);
 
 $token    = getenv("CW_TOKEN");
-
 if (isset($_SERVER['argv'][1])) {
-    $port     = (int)$_SERVER['argv'][1];
+    $port = (int)$_SERVER['argv'][1];
 }
 if (empty($token)) {
     die("please set CW_TOKEN\n");
 }
+
 if (empty($port)) {
     $port = 8888;
 }
@@ -26,7 +23,12 @@ if (is_file(".config")) {
     $config = array(
         'MAX_QUEUE_COUNT' => 40,
         'plugins' => array(
-            'Chatwork\Server\Plugin\SendMessagePlugin',
+            '\Chatwork\Server\Plugin\SendMessagePlugin',
+        ),
+        'providers' => array(
+            '\Chatwork\Server\Provider\SendMessageProvider',
+            '\Chatwork\Server\Provider\StatisticsProvider',
+            '\Chatwork\Server\Provider\FaviconProvider',
         )
     );
 }
@@ -37,25 +39,68 @@ $client = \Chatwork\APIFactory::createInstance(array(
 ));
 
 $timer = uv_timer_init();
-$loop = uv_default_loop();
+$loop  = uv_default_loop();
 
 $queue     = new SplQueue();
 $processor = new Chatwork\Server\QueueProcessor($loop, $timer, $queue);
 
+$stat = new \Chatwork\Server\Statistics();
 $container = array(
     "chatwork" => $client,
     "queue"    => $queue,
     "config"   => $config,
+    "stat"     => $stat,
 );
 
-foreach ($config['plugins'] as $plugin_class) {
+foreach ((array)$config['plugins'] as $plugin_class) {
     $plugin_klass = new $plugin_class($container);
     $processor->addPlugin($plugin_klass);
-
     unset($plugin_klass);
 }
 
+$kernel = new Chatwork\Server\Kernel();
+$kernel->setRouter(new \Chatwork\Server\Router());
+$kernel->setContainer($container);
+
+foreach ((array)$config['providers'] as $provider_class) {
+    $provider_klass = new $provider_class($container);
+    $kernel->registerProviders(array($provider_klass));
+}
+
 uv_timer_start($timer, SECONDS_MS, SECONDS_MS, array($processor, "process"));
+createServer(function($request = array(), \Chatwork\Server\HttpResponse $response, $client) use ($kernel, $stat){
+    parse_str(ltrim($request['QUERY_STRING'], "/?"), $params);
+
+    $peer = uv_tcp_getpeername($client);
+    $request['peer'] = $peer;
+
+    try {
+        $result = $kernel->process($request, $params);
+        $response->writeHead(200, array(
+            "Content-Type" => "text/plain",
+        ));
+        $response->write($result);
+        $response->end();
+        $stat->increment("http.200");
+    } catch (\Chatwork\Exception\RouteNotFoundException $e) {
+        $response->writeHead(404, array(
+            "Content-Type" => "text/html",
+        ));
+        $response->write("<h3>Not Found</h3>");
+        $response->write("<div>".$e->getMessage()."</div>");
+        $response->end();
+        $stat->increment("http.404");
+    } catch (Exception $e) {
+        $response->writeHead(500, array(
+            "Content-Type" => "text/html",
+        ));
+        $response->write("<h3>Server Error</h3>");
+        $response->write($e->getMessage());
+        $response->end();
+        $stat->increment("http.500");
+    }
+})->listen($port);
+uv_run();
 
 function createServer(Closure $closure)
 {
@@ -65,48 +110,4 @@ function createServer(Closure $closure)
     return $server;
 }
 
-/* やっつけ */
-createServer(function($request, \Chatwork\Server\HttpResponse $response, $client) use($queue, $config){
-    parse_str(ltrim($request['QUERY_STRING'], "/?"), $params);
-    if (trim($request['QUERY_STRING'], "/") == "favicon.ico") {
-        $response->writeHead(HTTP_STATUS_FORBIDDEN, array(
-            "Content-Type" => "text/plain",
-        ));
-        $response->write("Not Found");
-        $response->end();
-        return;
-    } else {
-        try {
-            /**
-             * send message api
-             *
-             * expected request: /?room_id={room_id}&msg={msg}
-             */
-            if (isset($params['room_id']) && isset($params['msg'])) {
-                if (count($queue) > $config['MAX_QUEUE_COUNT']) {
-                    throw new \RuntimeException("Too many queues. please retry");
-                }
-
-                $response->writeHead(HTTP_STATUS_OK, array(
-                    "Content-Type" => "text/plain"
-                ));
-                $response->write("Queued");
-                $response->end();
-
-                $queue->enqueue(array(
-                    "room_id"     => $params['room_id'],
-                    "msg"         => $params['msg'],
-                ));
-            } else {
-                throw new \RuntimeException("Forbidden");
-            }
-        } catch (\RuntimeException $e) {
-            $response->writeHead(HTTP_STATUS_FORBIDDEN, array(
-                "Content-Type" => "text/plain"
-            ));
-            $response->write($e->getMessage());
-            $response->end();
-        }
-    }
-})->listen($port);
-uv_run();
+exit(0);

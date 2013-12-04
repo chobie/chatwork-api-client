@@ -1,5 +1,5 @@
 <?php
-namespace Chatwork\Server\Plugin;
+namespace Chatwork\Server\Provider;
 use Chatwork\Server\ControllerCollection;
 use Chatwork\Server\Kernel;
 
@@ -28,21 +28,22 @@ use Chatwork\Server\Kernel;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-class SendMessagePlugin
+class FaviconProvider
 {
-    protected $client;
-
     protected $stat;
 
     public function __construct($container)
     {
-        $this->client = $container['chatwork'];
-        $this->stat   = $container['stat'];
     }
 
-    public function execute($room_id, $message)
+    public function connect(Kernel $kernel)
     {
-        $this->client->sendMessage($room_id, $message);
-        $this->stat->increment("message.success");
+        $collection = new ControllerCollection();
+        $collection->get("/favicon.ico", function($request, $params) use ($kernel){
+            // Memo: suppress error statistics
+            return "";
+        });
+
+        return $collection;
     }
 }

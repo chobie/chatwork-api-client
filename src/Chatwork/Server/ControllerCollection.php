@@ -1,7 +1,5 @@
 <?php
-namespace Chatwork\Server\Plugin;
-use Chatwork\Server\ControllerCollection;
-use Chatwork\Server\Kernel;
+namespace Chatwork\Server;
 
 /**
  * Chatwork API Client
@@ -28,21 +26,17 @@ use Chatwork\Server\Kernel;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-class SendMessagePlugin
+class ControllerCollection
 {
-    protected $client;
+    protected $routes = array();
 
-    protected $stat;
-
-    public function __construct($container)
+    public function get($route, $closure)
     {
-        $this->client = $container['chatwork'];
-        $this->stat   = $container['stat'];
+        $this->routes[$route] = new Route($route, $closure);
     }
 
-    public function execute($room_id, $message)
+    public function getRoutes()
     {
-        $this->client->sendMessage($room_id, $message);
-        $this->stat->increment("message.success");
+        return $this->routes;
     }
 }

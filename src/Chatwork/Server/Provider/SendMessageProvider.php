@@ -1,5 +1,5 @@
 <?php
-namespace Chatwork\Server\Plugin;
+namespace Chatwork\Server\Provider;
 use Chatwork\Server\ControllerCollection;
 use Chatwork\Server\Kernel;
 
@@ -28,21 +28,44 @@ use Chatwork\Server\Kernel;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-class SendMessagePlugin
+class SendMessageProvider
 {
     protected $client;
-
     protected $stat;
 
     public function __construct($container)
     {
         $this->client = $container['chatwork'];
-        $this->stat   = $container['stat'];
     }
 
-    public function execute($room_id, $message)
+    public function connect(Kernel $kernel)
     {
-        $this->client->sendMessage($room_id, $message);
-        $this->stat->increment("message.success");
+        $container = $kernel->getContainer();
+        $this->stat = $container['stat'];
+
+        $collection = new ControllerCollection();
+        $collection->get("/", function($request, $params) use ($kernel){
+            $container = $kernel->getContainer();
+            $queue = $container['queue'];
+            $config = $container['config'];
+
+            if (isset($params['room_id']) && isset($params['msg'])) {
+                if (count($queue) > $config['MAX_QUEUE_COUNT']) {
+                    throw new \RuntimeException("Too many queues. please retry");
+                }
+
+                $queue->enqueue(array(
+                    "room_id"     => $params['room_id'],
+                    "msg"         => $params['msg'],
+                    "address"     => $request['peer']['address'],
+                ));
+                $this->stat->increment('message.enqueue', 1);
+            } else {
+                throw new \Exception("usage: /?room_id=ROOM_ID&msg=MESSAGE");
+            }
+            return "QUEUED";
+        });
+
+        return $collection;
     }
 }

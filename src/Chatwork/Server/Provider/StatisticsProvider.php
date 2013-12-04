@@ -1,5 +1,5 @@
 <?php
-namespace Chatwork\Server\Plugin;
+namespace Chatwork\Server\Provider;
 use Chatwork\Server\ControllerCollection;
 use Chatwork\Server\Kernel;
 
@@ -28,21 +28,30 @@ use Chatwork\Server\Kernel;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-class SendMessagePlugin
+class StatisticsProvider
 {
-    protected $client;
-
     protected $stat;
 
     public function __construct($container)
     {
-        $this->client = $container['chatwork'];
-        $this->stat   = $container['stat'];
     }
 
-    public function execute($room_id, $message)
+    public function connect(Kernel $kernel)
     {
-        $this->client->sendMessage($room_id, $message);
-        $this->stat->increment("message.success");
+        $container = $kernel->getContainer();
+        $this->stat = $container['stat'];
+
+        $collection = new ControllerCollection();
+        $collection->get("/stat", function($request, $params) use ($kernel){
+            $buffer  = "memory: " . memory_get_usage(true) . PHP_EOL;
+            $stat = $this->stat;
+
+            foreach ($stat as $key => $value) {
+                $buffer .= sprintf("%s: %s" . PHP_EOL, $key, $value);
+            }
+            return $buffer;
+        });
+
+        return $collection;
     }
 }

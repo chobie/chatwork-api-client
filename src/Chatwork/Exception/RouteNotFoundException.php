@@ -1,7 +1,7 @@
 <?php
-namespace Chatwork\Server\Plugin;
-use Chatwork\Server\ControllerCollection;
-use Chatwork\Server\Kernel;
+namespace Chatwork\Exception;
+
+use \Exception;
 
 /**
  * Chatwork API Client
@@ -28,21 +28,7 @@ use Chatwork\Server\Kernel;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-class SendMessagePlugin
+class RouteNotFoundException
+    extends Exception
 {
-    protected $client;
-
-    protected $stat;
-
-    public function __construct($container)
-    {
-        $this->client = $container['chatwork'];
-        $this->stat   = $container['stat'];
-    }
-
-    public function execute($room_id, $message)
-    {
-        $this->client->sendMessage($room_id, $message);
-        $this->stat->increment("message.success");
-    }
 }
