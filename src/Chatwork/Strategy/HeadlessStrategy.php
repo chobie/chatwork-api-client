@@ -28,6 +28,8 @@ class HeadlessStrategy
     /** @var  string $access_token */
     protected $access_token;
 
+    protected $last_id = 0;
+
     public function __construct($params = array())
     {
         $this->params = array_merge($this->getDefaultParams(), $params);
@@ -57,6 +59,141 @@ class HeadlessStrategy
             exit;
         }
         $this->initiated = true;
+    }
+
+    public function initChat()
+    {
+        if (!$this->initiated) {
+            $this->initiate();
+        }
+
+        $query = array(
+            "cmd"  => "init_load",
+            "myid" => $this->myid,
+            "_v"   => self::CLIENT_VERSION,
+            "_av"  => 4,
+            "_t"   => $this->access_token,
+            "ln"   => "en",
+            "new" => 1
+        );
+
+        $builder = new RequestBuilder();
+        $builder->setRequestMethod("GET");
+        $builder->setEndpoint($this->params['endpoint']);
+        $builder->setQuery("/gateway.php");
+        $builder->setQueryParams($query);
+        $request = $builder->build($this, $this->driver);
+
+        $res = $this->driver->request($request);
+
+        if (strpos($res[0]['Content-Type'], "json") !== false) {
+            return $res[1];
+        } else {
+            return json_decode($res[1], true);
+        }
+    }
+
+    public function loadChat($room_id)
+    {
+        if (!$this->initiated) {
+            $this->initiate();
+        }
+
+        $query = array(
+            "cmd"  => "load_chat",
+            "myid" => $this->myid,
+            "_v"   => self::CLIENT_VERSION,
+            "_av"  => 4,
+            "_t"   => $this->access_token,
+            "ln"   => "en",
+            "room_id" => $room_id,
+            "last_chat_id" => $this->last_id,
+            "jump_to_chat_id" => 0,
+            "unread_num" => 0,
+        );
+
+        $builder = new RequestBuilder();
+        $builder->setRequestMethod("GET");
+        $builder->setEndpoint($this->params['endpoint']);
+        $builder->setQuery("/gateway.php");
+        $builder->setQueryParams($query);
+        $request = $builder->build($this, $this->driver);
+
+        $res = $this->driver->request($request);
+
+        if (strpos($res[0]['Content-Type'], "json") !== false) {
+            return $res[1];
+        } else {
+            return json_decode($res[1], true);
+        }
+    }
+
+    public function getUpdate()
+    {
+        if (!$this->initiated) {
+            $this->initiate();
+        }
+
+        $query = array(
+            "cmd"  => "get_update",
+            "myid" => $this->myid,
+            "_v"   => self::CLIENT_VERSION,
+            "_av"  => 4,
+            "_t"   => $this->access_token,
+            "account_id" => $this->myid,
+            "last_id" => $this->last_id,
+            "ver" => self::CLIENT_VERSION,
+            "new" => 1,
+            "ln"   => "en",
+            "_" => time() * 1000,
+        );
+
+        $builder = new RequestBuilder();
+        $builder->setRequestMethod("GET");
+        $builder->setEndpoint($this->params['endpoint']);
+        $builder->setQuery("/gateway.php");
+        $builder->setQueryParams($query);
+        $request = $builder->build($this, $this->driver);
+
+        $res = $this->driver->request($request);
+
+        if (strpos($res[0]['Content-Type'], "json") !== false) {
+            return $res[1];
+        } else {
+            return json_decode($res[1], true);
+        }
+    }
+
+    public function getCometTokenKey()
+    {
+        if (!$this->initiated) {
+            $this->initiate();
+        }
+
+        $query = array(
+            "cmd"  => "get_comet_token_key",
+            "myid" => $this->myid,
+            "_v"   => self::CLIENT_VERSION,
+            "_av"  => 4,
+            "_t"   => $this->access_token,
+            "ln"   => "en"
+        );
+
+        $builder = new RequestBuilder();
+        $builder->setRequestMethod("GET");
+        $builder->setEndpoint($this->params['endpoint']);
+        $builder->setQuery("/gateway.php");
+        $builder->setQueryParams($query);
+        $request = $builder->build($this, $this->driver);
+
+        $res = $this->driver->request($request);
+
+        if (strpos($res[0]['Content-Type'], "json") !== false) {
+            return $res[1];
+        } else {
+            $json = json_decode($res[1], true);
+            return $json['result']['token_key'];
+        }
     }
 
     public function sendMessage($room_id, $message)

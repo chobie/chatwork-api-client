@@ -115,7 +115,7 @@ class CurlDriver
                 list($version, $status, $status) = explode(" ", $line, 3);
                 $headers['HTTP_CODE'] = $status;
             } else {
-                list($key, $value) = explode(":", $line, 2);
+                @list($key, $value) = explode(":", $line, 2);
                 $headers[$key] = trim($value);
             }
         }
